@@ -59,13 +59,17 @@ public:
         return std::get<int>(*this);
     }
 
-    bool isDouble() const
+    bool isPureDouble() const
     {
         return std::holds_alternative<double>(*this);
     }
+    bool isDouble() const
+    {
+        return isPureDouble() || isInt();
+    }
     double asDouble() const
     {
-        return std::get<double>(*this);
+        return isPureDouble() ? std::get<double>(*this) : asInt();
     }
 
     bool isBool() const

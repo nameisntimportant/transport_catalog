@@ -6,29 +6,33 @@ using namespace std;
 
 namespace
 {
-void assertIsNotAllTypesExceptOne(const Json::Node& node, const std::string& exceptedType)
+void assertIsNotAllTypesExcept(const Json::Node& node, const std::string& exceptedType, const std::string& anotherExceptedType = "")
 {
-    if (exceptedType != "int")
+    if (exceptedType != "int" && anotherExceptedType != "int")
     {
         ASSERT(!node.isInt());
     }
-    if (exceptedType != "double")
+    if (exceptedType != "double" && anotherExceptedType != "double")
     {
         ASSERT(!node.isDouble());
     }
-    if (exceptedType != "string")
+    if (exceptedType != "pureDouble" && anotherExceptedType != "pureDouble")
+    {
+        ASSERT(!node.isPureDouble());
+    }
+    if (exceptedType != "string" && anotherExceptedType != "string")
     {
         ASSERT(!node.isString());
     }
-    if (exceptedType != "Array")
+    if (exceptedType != "Array" && anotherExceptedType != "Array")
     {
         ASSERT(!node.isArray());
     }
-    if (exceptedType != "Map")
+    if (exceptedType != "Map" && anotherExceptedType != "Map")
     {
         ASSERT(!node.isMap());
     }
-    if (exceptedType != "bool")
+    if (exceptedType != "bool" && anotherExceptedType != "bool")
     {
         ASSERT(!node.isBool());
     };
@@ -46,13 +50,13 @@ void testSingleElementLoading()
         istringstream ss("\"simpleString\"");
         const auto ssRoot = load(ss).getRoot();
         ASSERT(ssRoot.isString());
-        assertIsNotAllTypesExceptOne(ssRoot, "string");
+        assertIsNotAllTypesExcept(ssRoot, "string");
         ASSERT_EQUAL(ssRoot.asString(), "simpleString");
 
         istringstream ssww("\"simple string with witespaces\"");
         const auto sswwRoot = load(ssww).getRoot();
         ASSERT(sswwRoot.isString());
-        assertIsNotAllTypesExceptOne(ssRoot, "string");
+        assertIsNotAllTypesExcept(ssRoot, "string");
         ASSERT_EQUAL(sswwRoot.asString(), "simple string with witespaces");
     }
 
@@ -60,31 +64,36 @@ void testSingleElementLoading()
         istringstream positiveN("835");
         const auto positiveNRoot = load(positiveN).getRoot();
         ASSERT(positiveNRoot.isInt());
-        assertIsNotAllTypesExceptOne(positiveNRoot, "int");
+        ASSERT(positiveNRoot.isDouble());
+        assertIsNotAllTypesExcept(positiveNRoot, "int", "double");
         ASSERT_EQUAL(positiveNRoot.asInt(), 835);
 
         istringstream negativeN("-2400234");
         const auto negativeNRoot = load(negativeN).getRoot();
         ASSERT(negativeNRoot.isInt());
-        assertIsNotAllTypesExceptOne(negativeNRoot, "int");
+        ASSERT(negativeNRoot.isDouble());
+        assertIsNotAllTypesExcept(negativeNRoot, "int", "double");
         ASSERT_EQUAL(negativeNRoot.asInt(), -2400234);
 
         istringstream maxN(std::to_string(std::numeric_limits<int>::max()));
         auto maxNRoot = Json::load(maxN).getRoot();
         ASSERT(maxNRoot.isInt());
-        assertIsNotAllTypesExceptOne(negativeNRoot, "int");
+        ASSERT(maxNRoot.isDouble());
+        assertIsNotAllTypesExcept(negativeNRoot, "int", "double");
         ASSERT_EQUAL(maxNRoot.asInt(), std::numeric_limits<int>::max());
 
         istringstream minN(std::to_string(std::numeric_limits<int>::min()));
         auto minNRoot = Json::load(minN).getRoot();
         ASSERT(minNRoot.isInt());
-        assertIsNotAllTypesExceptOne(minNRoot, "int");
+        ASSERT(minNRoot.isDouble());
+        assertIsNotAllTypesExcept(minNRoot, "int", "double");
         ASSERT_EQUAL(minNRoot.asInt(), std::numeric_limits<int>::min());
 
         istringstream zero(std::to_string(0));
         auto zeroRoot = Json::load(zero).getRoot();
         ASSERT(zeroRoot.isInt());
-        assertIsNotAllTypesExceptOne(zeroRoot, "int");
+        ASSERT(zeroRoot.isDouble());
+        assertIsNotAllTypesExcept(zeroRoot, "int", "double");
         ASSERT_EQUAL(zeroRoot.asInt(), 0);
     }
 
@@ -92,37 +101,43 @@ void testSingleElementLoading()
         istringstream positiveN("7837824.4385");
         const auto positiveNRoot = load(positiveN).getRoot();
         ASSERT(positiveNRoot.isDouble());
-        assertIsNotAllTypesExceptOne(positiveNRoot, "double");
+        ASSERT(positiveNRoot.isPureDouble());
+        assertIsNotAllTypesExcept(positiveNRoot, "double", "pureDouble");
         ASSERT_DOUBLE_EQUAL(positiveNRoot.asDouble(), 7837824.4385);
 
         istringstream negativeN("-0.348236");
         const auto negativeNRoot = load(negativeN).getRoot();
         ASSERT(negativeNRoot.isDouble());
-        assertIsNotAllTypesExceptOne(negativeNRoot, "double");
+        ASSERT(negativeNRoot.isPureDouble());
+        assertIsNotAllTypesExcept(negativeNRoot, "double", "pureDouble");
         ASSERT_DOUBLE_EQUAL(negativeNRoot.asDouble(), -0.348236);
 
         istringstream smallN("0.000001");
         const auto smallNRoot = load(smallN).getRoot();
-        ASSERT_DOUBLE_EQUAL(smallNRoot.asDouble(), 0.000001);
-        assertIsNotAllTypesExceptOne(smallNRoot, "double");
         ASSERT(smallNRoot.isDouble());
+        ASSERT(smallNRoot.isPureDouble());
+        assertIsNotAllTypesExcept(smallNRoot, "double", "pureDouble");
+        ASSERT_DOUBLE_EQUAL(smallNRoot.asDouble(), 0.000001);
 
         istringstream maxN(std::to_string(std::numeric_limits<int>::max()));
         auto maxNRoot = Json::load(maxN).getRoot();
         ASSERT(maxNRoot.isDouble());
-        assertIsNotAllTypesExceptOne(maxNRoot, "double");
+        ASSERT(maxNRoot.isInt());
+        assertIsNotAllTypesExcept(maxNRoot, "double", "int");
         ASSERT_DOUBLE_EQUAL(maxNRoot.asDouble(), std::numeric_limits<int>::max());
 
         istringstream minN(std::to_string(std::numeric_limits<int>::min()));
         auto minNRoot = Json::load(minN).getRoot();
         ASSERT(minNRoot.isDouble());
-        assertIsNotAllTypesExceptOne(minNRoot, "double");
+        ASSERT(minNRoot.isInt());
+        assertIsNotAllTypesExcept(minNRoot, "double", "int");
         ASSERT_DOUBLE_EQUAL(minNRoot.asDouble(), std::numeric_limits<int>::min());
 
         istringstream zero(std::to_string(0));
         auto zeroRoot = Json::load(zero).getRoot();
         ASSERT(zeroRoot.isDouble());
-        assertIsNotAllTypesExceptOne(zeroRoot, "double");
+        ASSERT(zeroRoot.isInt());
+        assertIsNotAllTypesExcept(zeroRoot, "double", "int");
         ASSERT_EQUAL(zeroRoot.asDouble(), 0);
     }
 
@@ -130,13 +145,13 @@ void testSingleElementLoading()
         istringstream array("[\"A\", \"B\", \"C\"]");
         const auto arrayRoot = load(array).getRoot();
         ASSERT(arrayRoot.isArray());
-        assertIsNotAllTypesExceptOne(arrayRoot, "Array");
+        assertIsNotAllTypesExcept(arrayRoot, "Array");
         ASSERT_EQUAL(arrayRoot.asArray(), Array({Node("A"), Node("B"), Node("C")}));
 
         istringstream emptyArray("[]");
         const auto emptyArrayRoot = load(emptyArray).getRoot();
         ASSERT(emptyArrayRoot.isArray());
-        assertIsNotAllTypesExceptOne(emptyArrayRoot, "Array");
+        assertIsNotAllTypesExcept(emptyArrayRoot, "Array");
         ASSERT_EQUAL(emptyArrayRoot.asArray(), Array({}));
     }
 
@@ -144,13 +159,13 @@ void testSingleElementLoading()
         istringstream map("{\"A\" : 1, \"B\" : 2, \"C\" : 3}");
         const auto mapRoot = load(map).getRoot();
         ASSERT(mapRoot.isMap());
-        assertIsNotAllTypesExceptOne(mapRoot, "Map");
+        assertIsNotAllTypesExcept(mapRoot, "Map");
         ASSERT_EQUAL(mapRoot.asMap(), Map({{"A", {Node(1)}}, {"B", {Node(2)}}, {"C", {Node(3)}}}));
 
         istringstream emptyMap("{}");
         const auto emptyMapRoot = load(emptyMap).getRoot();
         ASSERT(emptyMapRoot.isMap());
-        assertIsNotAllTypesExceptOne(emptyMapRoot, "Map");
+        assertIsNotAllTypesExcept(emptyMapRoot, "Map");
         ASSERT_EQUAL(emptyMapRoot.asMap(), Map({}));
     }
 
@@ -158,13 +173,13 @@ void testSingleElementLoading()
         istringstream falseBool("false");
         const auto falseBoolRoot = load(falseBool).getRoot();
         ASSERT(falseBoolRoot.isBool());
-        assertIsNotAllTypesExceptOne(falseBoolRoot, "bool");
+        assertIsNotAllTypesExcept(falseBoolRoot, "bool");
         ASSERT_EQUAL(falseBoolRoot.asBool(), Node(false));
 
         istringstream trueBool("true");
         const auto trueBoolRoot = load(trueBool).getRoot();
         ASSERT(trueBoolRoot.isBool());
-        assertIsNotAllTypesExceptOne(trueBoolRoot, "bool");
+        assertIsNotAllTypesExcept(trueBoolRoot, "bool");
         ASSERT_EQUAL(trueBoolRoot.asBool(), Node(true));
     }
 }
@@ -193,7 +208,7 @@ void testNestedElementsLoading()
                                      {"arrayOfMaps", arrayOfMaps}};
 
     const auto nestedRoot = load(nested).getRoot();
-    assertIsNotAllTypesExceptOne(nestedRoot.asMap(), "Map");
+    assertIsNotAllTypesExcept(nestedRoot.asMap(), "Map");
     ASSERT_EQUAL(nestedRoot.asMap(), expectedResult);
 }
 

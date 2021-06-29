@@ -43,6 +43,7 @@ Node loadNumber(istream& input)
     {
         input.ignore(1);
     }
+
     int intPart = 0;
     while (isdigit(input.peek()))
     {

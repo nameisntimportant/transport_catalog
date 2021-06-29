@@ -68,6 +68,24 @@ void testSingleElementLoading()
         ASSERT(negativeNRoot.isInt());
         assertIsNotAllTypesExceptOne(negativeNRoot, "int");
         ASSERT_EQUAL(negativeNRoot.asInt(), -2400234);
+
+        istringstream maxN(std::to_string(std::numeric_limits<int>::max()));
+        auto maxNRoot = Json::load(maxN).getRoot();
+        ASSERT(maxNRoot.isInt());
+        assertIsNotAllTypesExceptOne(negativeNRoot, "int");
+        ASSERT_EQUAL(maxNRoot.asInt(), std::numeric_limits<int>::max());
+
+        istringstream minN(std::to_string(std::numeric_limits<int>::min()));
+        auto minNRoot = Json::load(minN).getRoot();
+        ASSERT(minNRoot.isInt());
+        assertIsNotAllTypesExceptOne(minNRoot, "int");
+        ASSERT_EQUAL(minNRoot.asInt(), std::numeric_limits<int>::min());
+
+        istringstream zero(std::to_string(0));
+        auto zeroRoot = Json::load(zero).getRoot();
+        ASSERT(zeroRoot.isInt());
+        assertIsNotAllTypesExceptOne(zeroRoot, "int");
+        ASSERT_EQUAL(zeroRoot.asInt(), 0);
     }
 
     {
@@ -86,8 +104,26 @@ void testSingleElementLoading()
         istringstream smallN("0.000001");
         const auto smallNRoot = load(smallN).getRoot();
         ASSERT_DOUBLE_EQUAL(smallNRoot.asDouble(), 0.000001);
-        ASSERT(smallNRoot.isDouble());
         assertIsNotAllTypesExceptOne(smallNRoot, "double");
+        ASSERT(smallNRoot.isDouble());
+
+        istringstream maxN(std::to_string(std::numeric_limits<int>::max()));
+        auto maxNRoot = Json::load(maxN).getRoot();
+        ASSERT(maxNRoot.isDouble());
+        assertIsNotAllTypesExceptOne(maxNRoot, "double");
+        ASSERT_DOUBLE_EQUAL(maxNRoot.asDouble(), std::numeric_limits<int>::max());
+
+        istringstream minN(std::to_string(std::numeric_limits<int>::min()));
+        auto minNRoot = Json::load(minN).getRoot();
+        ASSERT(minNRoot.isDouble());
+        assertIsNotAllTypesExceptOne(minNRoot, "double");
+        ASSERT_DOUBLE_EQUAL(minNRoot.asDouble(), std::numeric_limits<int>::min());
+
+        istringstream zero(std::to_string(0));
+        auto zeroRoot = Json::load(zero).getRoot();
+        ASSERT(zeroRoot.isDouble());
+        assertIsNotAllTypesExceptOne(zeroRoot, "double");
+        ASSERT_EQUAL(zeroRoot.asDouble(), 0);
     }
 
     {

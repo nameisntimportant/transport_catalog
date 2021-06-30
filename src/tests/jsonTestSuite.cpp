@@ -6,7 +6,9 @@ using namespace std;
 
 namespace
 {
-void assertIsNotAllTypesExcept(const Json::Node& node, const std::string& exceptedType, const std::string& anotherExceptedType = "")
+void assertIsNotAllTypesExcept(const Json::Node& node,
+                               const std::string& exceptedType,
+                               const std::string& anotherExceptedType = "")
 {
     if (exceptedType != "int" && anotherExceptedType != "int")
     {
@@ -203,9 +205,9 @@ void testNestedElementsLoading()
         Array{Map{{"trueKey", Node(true)}, {"falseKey", Node(false)}},
               Map{{"key", Node("value")}, {"another key", Node("another value")}}};
     const auto expectedResult = Map{{"doublesArray", doublesArray},
-                                     {"booleansArray", booleansArray},
-                                     {"stringToIntMap", stringToIntMap},
-                                     {"arrayOfMaps", arrayOfMaps}};
+                                    {"booleansArray", booleansArray},
+                                    {"stringToIntMap", stringToIntMap},
+                                    {"arrayOfMaps", arrayOfMaps}};
 
     const auto nestedRoot = load(nested).getRoot();
     assertIsNotAllTypesExcept(nestedRoot.asMap(), "Map");
@@ -224,9 +226,30 @@ void testInvalidInputException()
     catch (...)
     {
         isExceptionThrown = true;
-
     }
     ASSERT(isExceptionThrown);
+}
+
+void testPrint()
+{
+    const auto doublesArray = Array{Node(1.1), Node(2.2), Node(3.3)};
+    const auto booleansArray = Array{Node(true), Node(false), Node(false), Node(true)};
+    const auto stringToIntMap = Map{{"one", Node(1)}, {"ten", Node(10)}};
+    const auto arrayOfMaps =
+        Array{Map{{"trueKey", Node(true)}, {"falseKey", Node(false)}},
+              Map{{"key", Node("value")}, {"another key", Node("another value")}}};
+    const auto rootNode = Map{{"doublesArray", doublesArray},
+                              {"booleansArray", booleansArray},
+                              {"stringToIntMap", stringToIntMap},
+                              {"arrayOfMaps", arrayOfMaps}};
+    string expected(
+        "{\"arrayOfMaps\": [{\"falseKey\": false, \"trueKey\": true}, {\"another key\": \"another "
+        "value\", \"key\": \"value\"}], \"booleansArray\": [true, false, false, true], "
+        "\"doublesArray\": [1.1, 2.2, 3.3], \"stringToIntMap\": {\"one\": 1, \"ten\": 10}}");
+
+    ostringstream actual;
+    print(JsonTree(rootNode), actual);
+    ASSERT_EQUAL(actual.str(), expected);
 }
 
 void run()
@@ -235,6 +258,7 @@ void run()
     RUN_TEST(tr, testSingleElementLoading);
     RUN_TEST(tr, testNestedElementsLoading);
     RUN_TEST(tr, testInvalidInputException);
+    RUN_TEST(tr, testPrint);
 }
 
 } // namespace Tests

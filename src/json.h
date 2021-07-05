@@ -14,7 +14,7 @@ class Node;
 using Array = std::vector<Node>;
 using Map = std::map<std::string, Node>;
 
-class Node : std::variant<Map, std::string, Array, int, double, bool>
+class Node final : std::variant<Map, std::string, Array, int, double, bool>
 {
 public:
     using variant::variant;

@@ -5,7 +5,6 @@ using namespace std;
 
 namespace Json
 {
-
 Node loadArray(istream& input)
 {
     vector<Node> result;
@@ -238,5 +237,4 @@ std::ostream& operator<<(std::ostream& stream, const Node& node)
     printNode(node, stream);
     return stream;
 }
-
 } // namespace Json

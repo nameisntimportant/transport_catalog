@@ -260,6 +260,5 @@ void run()
     RUN_TEST(tr, testInvalidInputException);
     RUN_TEST(tr, testPrint);
 }
-
 } // namespace Tests
 } // namespace Json

@@ -9,7 +9,6 @@
 
 namespace Json
 {
-
 class Node;
 using Array = std::vector<Node>;
 using Map = std::map<std::string, Node>;
@@ -124,6 +123,4 @@ void printValue(const Array& nodes, std::ostream& output);
 void printValue(const Map& map, std::ostream& output);
 
 void print(const JsonTree& tree, std::ostream& output);
-
-
 } // namespace Json

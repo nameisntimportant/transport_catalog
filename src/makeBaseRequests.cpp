@@ -80,7 +80,7 @@ Bus Bus::parseFrom(const Json::Map& attrs)
     Bus result;
     result.name = attrs.at("name").asString();
 
-    if (attrs.at("stops").isArray())
+    if (attrs.count("stops") > 0)
     {
         const auto& stops = attrs.at("stops").asArray();
         if (!stops.empty())
@@ -114,7 +114,7 @@ std::ostream& operator<<(std::ostream& os, const Bus& bus)
     {
         os << stopName << ' ';
     }
-    return os;
+    return os << " }";
 }
 
 ParsedRequests parseRequests(const Json::Array& nodes)
@@ -136,5 +136,4 @@ ParsedRequests parseRequests(const Json::Array& nodes)
 
     return result;
 }
-
 } // namespace MakeBaseRequests

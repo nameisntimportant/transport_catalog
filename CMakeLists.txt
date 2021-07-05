@@ -15,12 +15,17 @@ include_directories(${UTILS_DIRECTORY})
 set (PROJECT_SRCS
     ${SRC_DIRECTORY}/main.cpp
     ${SRC_DIRECTORY}/json.cpp
+    ${SRC_DIRECTORY}/makeBaseRequests.cpp
     ${TESTS_DIRECTORY}/jsonTestSuite.cpp
+    ${TESTS_DIRECTORY}/makeBaseRequestsTestSuit.cpp
     ${UTILS_DIRECTORY}/utils.cpp)
 
 set (PROJECT_HDRS
     ${SRC_DIRECTORY}/json.h
+    ${SRC_DIRECTORY}/calculateData.h
+    ${SRC_DIRECTORY}/makeBaseRequests.h
     ${TESTS_DIRECTORY}/jsonTestSuite.h
+    ${TESTS_DIRECTORY}/makeBaseRequestsTestSuit.h
     ${UTILS_DIRECTORY}/utils.h
     ${UTILS_DIRECTORY}/log.h
     ${UTILS_DIRECTORY}/testRunner.h)

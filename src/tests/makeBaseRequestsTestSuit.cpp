@@ -17,7 +17,8 @@ void testBusParsing()
                                      {"stops", Json::Array{"stopA", "stopB", "stopC"}},
                                      {"is_roundtrip", false}};
 
-        const Bus expected = {.name = "NonRoundtripBusABC", .stops = {"stopA", "stopB", "stopC", "stopB", "stopA"}};
+        const Bus expected = {.name = "NonRoundtripBusABC",
+                              .stops = {"stopA", "stopB", "stopC", "stopB", "stopA"}};
 
         ASSERT_EQUAL(Bus::parseFrom(input), expected);
     }
@@ -33,7 +34,7 @@ void testBusParsing()
     }
 
     {
-        ASSERT_EQUAL(Bus::parseFrom(Json::Map{{"name", "NoStopsBus"}, {"stops", Json::Array{}}}),
+        ASSERT_EQUAL(Bus::parseFrom(Json::Map{{"name", "NoStopsBus"}}),
                      Bus({.name = "NoStopsBus", .stops = {}}));
     }
 }

@@ -6,9 +6,7 @@ namespace Json
 {
 namespace Tests
 {
-
 void run();
-
 } // namespace tests
 } // namespace requests
 

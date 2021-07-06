@@ -45,7 +45,6 @@ namespace Json
 {
 namespace Tests
 {
-
 void testSingleElementLoading()
 {
     {

@@ -1,6 +1,8 @@
-#include "makeBaseRequestsTestSuit.h"
+#include "makeBaseRequestsTestSuite.h"
+
 #include "../json.h"
 #include "../makeBaseRequests.h"
+
 #include "testRunner.h"
 
 using namespace std;
@@ -9,7 +11,6 @@ namespace MakeBaseRequests
 {
 namespace Tests
 {
-
 void testBusParsing()
 {
     {

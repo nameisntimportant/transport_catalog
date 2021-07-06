@@ -1,13 +1,13 @@
-#include "makeBaseRequestsTestSuite.h"
+#include "baseRequestsTestSuite.h"
 
+#include "../baseRequests.h"
 #include "../json.h"
-#include "../makeBaseRequests.h"
 
 #include "testRunner.h"
 
 using namespace std;
 
-namespace MakeBaseRequests
+namespace BaseRequests
 {
 namespace Tests
 {
@@ -74,4 +74,4 @@ void run()
     RUN_TEST(tr, testStopParsing);
 }
 } // namespace Tests
-} // namespace MakeBaseRequests
+} // namespace BaseRequests

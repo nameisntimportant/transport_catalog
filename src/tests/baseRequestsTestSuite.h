@@ -1,9 +1,9 @@
 #pragma once
 
-namespace MakeBaseRequests
+namespace BaseRequests
 {
 namespace Tests
 {
 void run();
 } // namespace Tests
-} // namespace MakeBaseRequests
+} // namespace BaseRequests

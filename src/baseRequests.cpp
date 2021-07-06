@@ -1,13 +1,13 @@
-#include "makeBaseRequests.h"
+#include "baseRequests.h"
 
 using namespace std;
 
-namespace MakeBaseRequests
+namespace BaseRequests
 {
 Stop Stop::parseFrom(const Json::Map& attrs)
 {
     Sphere::Point position = {.latitude = attrs.at("latitude").asDouble(),
-                            .longitude = attrs.at("longitude").asDouble()};
+                              .longitude = attrs.at("longitude").asDouble()};
     Stop stop = {.name = attrs.at("name").asString(), .position = position};
 
     if (attrs.count("road_distances") > 0)
@@ -136,4 +136,4 @@ ParsedRequests parseRequests(const Json::Array& nodes)
 
     return result;
 }
-} // namespace MakeBaseRequests
+} // namespace BaseRequests

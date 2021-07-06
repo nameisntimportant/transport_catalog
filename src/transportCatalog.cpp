@@ -3,7 +3,7 @@
 
 using namespace std;
 
-TransportCatalog::TransportCatalog(const MakeBaseRequests::ParsedRequests& data)
+TransportCatalog::TransportCatalog(const BaseRequests::ParsedRequests& data)
 {
     for (const auto& stop : data.stops)
     {
@@ -38,7 +38,7 @@ const Responses::Bus* TransportCatalog::getBus(const string& name) const
 }
 
 TransportCatalog::PointsMap TransportCatalog::getStopCoordinates(
-    const MakeBaseRequests::ParsedStops& stops)
+    const BaseRequests::ParsedStops& stops)
 {
     PointsMap result;
     for (const auto& stopInput : stops)
@@ -49,7 +49,7 @@ TransportCatalog::PointsMap TransportCatalog::getStopCoordinates(
     return result;
 }
 
-RouteDistancesMap TransportCatalog::getRouteDistances(const MakeBaseRequests::ParsedStops& stops)
+RouteDistancesMap TransportCatalog::getRouteDistances(const BaseRequests::ParsedStops& stops)
 {
     RouteDistancesMap result;
     for (const auto& stop : stops)

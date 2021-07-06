@@ -8,7 +8,7 @@
 #include <variant>
 #include <vector>
 
-namespace MakeBaseRequests
+namespace BaseRequests
 {
 
 struct Distance
@@ -46,4 +46,4 @@ struct ParsedRequests
     ParsedBuses buses;
 };
 ParsedRequests parseRequests(const Json::Array& nodes);
-} // namespace MakeBaseRequests
+} // namespace BaseRequests

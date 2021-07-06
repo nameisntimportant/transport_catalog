@@ -1,6 +1,6 @@
 #pragma once
 
-#include "makeBaseRequests.h"
+#include "baseRequests.h"
 #include "routeDistancesDict.h"
 #include "sphere.h"
 
@@ -27,19 +27,19 @@ struct Bus
 class TransportCatalog
 {
 private:
-    using Bus = MakeBaseRequests::Bus;
-    using Stop = MakeBaseRequests::Stop;
+    using Bus = BaseRequests::Bus;
+    using Stop = BaseRequests::Stop;
     using PointsMap = std::unordered_map<std::string, Sphere::Point>;
 
 public:
-    TransportCatalog(const MakeBaseRequests::ParsedRequests& data);
+    TransportCatalog(const BaseRequests::ParsedRequests& data);
 
     const Responses::Stop* getStop(const std::string& name) const;
     const Responses::Bus* getBus(const std::string& name) const;
 
 private:
-    static PointsMap getStopCoordinates(const MakeBaseRequests::ParsedStops& stops);
-    static RouteDistancesMap getRouteDistances(const MakeBaseRequests::ParsedStops& stops);
+    static PointsMap getStopCoordinates(const BaseRequests::ParsedStops& stops);
+    static RouteDistancesMap getRouteDistances(const BaseRequests::ParsedStops& stops);
 
     static size_t calculateRoadRouteLength(const std::vector<std::string>& stops,
                                            const RouteDistancesMap& distancesDict);

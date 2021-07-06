@@ -15,23 +15,23 @@ include_directories(${UTILS_DIRECTORY})
 set (PROJECT_SRCS
     ${SRC_DIRECTORY}/main.cpp
     ${SRC_DIRECTORY}/json.cpp
-    ${SRC_DIRECTORY}/makeBaseRequests.cpp
+    ${SRC_DIRECTORY}/baseRequests.cpp
     ${SRC_DIRECTORY}/transportCatalog.cpp
     ${SRC_DIRECTORY}/sphere.cpp
     ${SRC_DIRECTORY}/statRequests.cpp
     ${TESTS_DIRECTORY}/jsonTestSuite.cpp
-    ${TESTS_DIRECTORY}/makeBaseRequestsTestSuite.cpp
+    ${TESTS_DIRECTORY}/baseRequestsTestSuite.cpp
     ${TESTS_DIRECTORY}/sphereTestSuite.cpp
     ${UTILS_DIRECTORY}/utils.cpp)
 
 set (PROJECT_HDRS
     ${SRC_DIRECTORY}/json.h
-    ${SRC_DIRECTORY}/makeBaseRequests.h
+    ${SRC_DIRECTORY}/baseRequests.h
     ${SRC_DIRECTORY}/transportCatalog.h
     ${SRC_DIRECTORY}/sphere.h
     ${SRC_DIRECTORY}/statRequests.h
     ${TESTS_DIRECTORY}/jsonTestSuite.h
-    ${TESTS_DIRECTORY}/makeBaseRequestsTestSuite.h
+    ${TESTS_DIRECTORY}/baseRequestsTestSuite.h
     ${TESTS_DIRECTORY}/sphereTestSuite.h
     ${UTILS_DIRECTORY}/utils.h
     ${UTILS_DIRECTORY}/log.h

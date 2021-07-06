@@ -1,13 +1,13 @@
 #include "json.h"
 #include "log.h"
-#include "makeBaseRequests.h"
+#include "baseRequests.h"
 #include "statRequests.h"
 #include "transportCatalog.h"
 #include "utils.h"
 
 #include "testRunner.h"
 #include "tests/jsonTestSuite.h"
-#include "tests/makeBaseRequestsTestSuite.h"
+#include "tests/baseRequestsTestSuite.h"
 #include "tests/sphereTestSuite.h"
 
 #include <fstream>
@@ -40,12 +40,12 @@ void generalTest()
 {
     for (size_t i = 1; i < 2; i++)
     {
-        auto makeBaseInput = openFileAsInputStream("../transport_catalog/testData/make_base_" +
+        auto baseInput = openFileAsInputStream("../transport_catalog/testData/make_base_" +
                                               to_string(i) + ".json");
-        const auto makeBaseJsonTree = Json::load(makeBaseInput);
-        const auto& makeBaseMap = makeBaseJsonTree.getRoot().asMap();
+        const auto baseJsonTree = Json::load(baseInput);
+        const auto& baseMap = baseJsonTree.getRoot().asMap();
         const auto baseRequests =
-            MakeBaseRequests::parseRequests(makeBaseMap.at("base_requests").asArray());
+            BaseRequests::parseRequests(baseMap.at("base_requests").asArray());
         const TransportCatalog database(baseRequests);
 
         auto statRequestsBaseInput = openFileAsInputStream(
@@ -68,7 +68,7 @@ void generalTest()
 void runTests()
 {
     Json::Tests::run();
-    MakeBaseRequests::Tests::run();
+    BaseRequests::Tests::run();
     Sphere::Tests::run();
 
     TestRunner tr;

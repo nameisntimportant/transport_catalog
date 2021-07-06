@@ -10,7 +10,7 @@ using namespace std;
 
 namespace
 {
-const Json::Map NotFoundErrorResponce = {{"error_message"s, Json::Node("not found"s)}};
+const Json::Map NotFoundErrorResponse = {{"error_message"s, Json::Node("not found"s)}};
 } // namespace
 
 namespace StatRequests
@@ -44,7 +44,7 @@ Json::Array processAll(const TransportCatalog& database, const Json::Array& requ
                     const auto* stop = database.getStop(stopRequest.name);
                     if (!stop)
                     {
-                        return NotFoundErrorResponce;
+                        return NotFoundErrorResponse;
                     }
 
                     Json::Array busNodes;
@@ -59,7 +59,7 @@ Json::Array processAll(const TransportCatalog& database, const Json::Array& requ
                     const auto* bus = database.getBus(busRequest.name);
                     if (!bus)
                     {
-                        return NotFoundErrorResponce;
+                        return NotFoundErrorResponse;
                     }
 
                     return Json::Map{

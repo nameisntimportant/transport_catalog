@@ -15,7 +15,7 @@ TransportCatalog::TransportCatalog(const MakeBaseRequests::ParsedRequests& data)
     for (const auto& bus : data.buses)
     {
         buses_[bus.name] =
-            Responces::Bus{bus.stops.size(),
+            Responses::Bus{bus.stops.size(),
                            calculateUniqueItemsCount(asRange(bus.stops)),
                            calculateRoadRouteLength(bus.stops, routeDistances),
                            calculateOrthodromicRouteLength(bus.stops, stopsCoordinates)};
@@ -27,12 +27,12 @@ TransportCatalog::TransportCatalog(const MakeBaseRequests::ParsedRequests& data)
     }
 }
 
-const Responces::Stop* TransportCatalog::getStop(const string& name) const
+const Responses::Stop* TransportCatalog::getStop(const string& name) const
 {
     return getValuePointer(stops_, name);
 }
 
-const Responces::Bus* TransportCatalog::getBus(const string& name) const
+const Responses::Bus* TransportCatalog::getBus(const string& name) const
 {
     return getValuePointer(buses_, name);
 }

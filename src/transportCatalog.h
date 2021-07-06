@@ -8,7 +8,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace Responces
+namespace Responses
 {
 struct Stop
 {
@@ -22,7 +22,7 @@ struct Bus
     size_t roadRouteLength = 0;
     double orthodromicRouteLength = 0.0;
 };
-} // namespace Responces
+} // namespace Responses
 
 class TransportCatalog
 {
@@ -34,8 +34,8 @@ private:
 public:
     TransportCatalog(const MakeBaseRequests::ParsedRequests& data);
 
-    const Responces::Stop* getStop(const std::string& name) const;
-    const Responces::Bus* getBus(const std::string& name) const;
+    const Responses::Stop* getStop(const std::string& name) const;
+    const Responses::Bus* getBus(const std::string& name) const;
 
 private:
     static PointsMap getStopCoordinates(const MakeBaseRequests::ParsedStops& stops);
@@ -46,6 +46,6 @@ private:
     static double calculateOrthodromicRouteLength(const std::vector<std::string>& stops,
                                                   const PointsMap& stopsCoordinates);
 
-    std::unordered_map<std::string, Responces::Stop> stops_;
-    std::unordered_map<std::string, Responces::Bus> buses_;
+    std::unordered_map<std::string, Responses::Stop> stops_;
+    std::unordered_map<std::string, Responses::Bus> buses_;
 };

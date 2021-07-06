@@ -1,6 +1,7 @@
 #pragma once
 
 #include "json.h"
+#include "sphere.h"
 
 #include <map>
 #include <string>
@@ -9,11 +10,6 @@
 
 namespace MakeBaseRequests
 {
-struct Coordinates
-{
-    double latitude = 0;
-    double longitude = 0;
-};
 
 struct Distance
 {
@@ -24,7 +20,7 @@ struct Distance
 struct Stop
 {
     std::string name;
-    Coordinates position;
+    Sphere::Point position;
     std::vector<Distance> distances;
 
     static Stop parseFrom(const Json::Map& attrs);
@@ -42,7 +38,12 @@ struct Bus
 bool operator==(const Bus& lhs, const Bus& rhs);
 std::ostream& operator<<(std::ostream& os, const Bus& bus);
 
-using ParsedRequest = std::variant<Stop, Bus>;
-using ParsedRequests = std::vector<ParsedRequest>;
+using ParsedStops = std::vector<Stop>;
+using ParsedBuses = std::vector<Bus>;
+struct ParsedRequests
+{
+    ParsedStops stops;
+    ParsedBuses buses;
+};
 ParsedRequests parseRequests(const Json::Array& nodes);
 } // namespace MakeBaseRequests

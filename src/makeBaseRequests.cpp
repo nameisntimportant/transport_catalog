@@ -6,7 +6,7 @@ namespace MakeBaseRequests
 {
 Stop Stop::parseFrom(const Json::Map& attrs)
 {
-    Coordinates position = {.latitude = attrs.at("latitude").asDouble(),
+    Sphere::Point position = {.latitude = attrs.at("latitude").asDouble(),
                             .longitude = attrs.at("longitude").asDouble()};
     Stop stop = {.name = attrs.at("name").asString(), .position = position};
 
@@ -52,7 +52,7 @@ std::ostream& operator<<(std::ostream& os, const Stop& stop)
     return os;
 }
 
-static vector<string> parseStops(const Json::Array& stopNodes, bool isRoundtrip)
+vector<string> parseStops(const Json::Array& stopNodes, bool isRoundtrip)
 {
     vector<string> stops;
     stops.reserve(stopNodes.size());
@@ -126,11 +126,11 @@ ParsedRequests parseRequests(const Json::Array& nodes)
         const auto& nodeDict = node.asMap();
         if (nodeDict.at("type").asString() == "Stop")
         {
-            result.push_back(Stop::parseFrom(nodeDict));
+            result.stops.push_back(Stop::parseFrom(nodeDict));
         }
         else
         {
-            result.push_back(Bus::parseFrom(nodeDict));
+            result.buses.push_back(Bus::parseFrom(nodeDict));
         }
     }
 

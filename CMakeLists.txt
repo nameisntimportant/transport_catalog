@@ -18,6 +18,7 @@ set (PROJECT_SRCS
     ${SRC_DIRECTORY}/makeBaseRequests.cpp
     ${SRC_DIRECTORY}/transportCatalog.cpp
     ${SRC_DIRECTORY}/sphere.cpp
+    ${SRC_DIRECTORY}/statRequests.cpp
     ${TESTS_DIRECTORY}/jsonTestSuite.cpp
     ${TESTS_DIRECTORY}/makeBaseRequestsTestSuite.cpp
     ${TESTS_DIRECTORY}/sphereTestSuite.cpp
@@ -28,6 +29,7 @@ set (PROJECT_HDRS
     ${SRC_DIRECTORY}/makeBaseRequests.h
     ${SRC_DIRECTORY}/transportCatalog.h
     ${SRC_DIRECTORY}/sphere.h
+    ${SRC_DIRECTORY}/statRequests.h
     ${TESTS_DIRECTORY}/jsonTestSuite.h
     ${TESTS_DIRECTORY}/makeBaseRequestsTestSuite.h
     ${TESTS_DIRECTORY}/sphereTestSuite.h

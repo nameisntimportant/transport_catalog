@@ -1,0 +1,34 @@
+{
+  "stat_requests": [
+    {
+      "type": "Bus",
+      "name": "256",
+      "id": 1965312327
+    },
+    {
+      "type": "Bus",
+      "name": "750",
+      "id": 519139350
+    },
+    {
+      "type": "Bus",
+      "name": "751",
+      "id": 194217464
+    },
+    {
+      "type": "Stop",
+      "name": "Samara",
+      "id": 746888088
+    },
+    {
+      "type": "Stop",
+      "name": "Prazhskaya",
+      "id": 65100610
+    },
+    {
+      "type": "Stop",
+      "name": "Biryulyovo Zapadnoye",
+      "id": 1042838872
+    }
+  ]
+}

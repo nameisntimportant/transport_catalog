@@ -66,3 +66,13 @@ bool fuzzyCompare(double lhs, double rhs);
         str << "unreachable point was reached! " << __FILE__ << ':' << __LINE__ << ". " << msg; \
         throw std::runtime_error(str.str());                                                    \
     }
+
+#define M_ASSERT(expr, msg)                                                              \
+    {                                                                                  \
+        if (!expr)                                                                     \
+        {                                                                              \
+            std::ostringstream str;                                                    \
+            str << "assertion failed! " << __FILE__ << ':' << __LINE__ << ". " << msg; \
+            throw std::runtime_error(str.str());                                       \
+        }                                                                              \
+    }

@@ -28,10 +28,7 @@ Node loadBool(istream& input)
     {
         s.push_back(input.get());
     }
-    if (s != "true" && s != "false")
-    {
-        UNREACHABLE("Can't cast string " + s + " to bool")
-    }
+    M_ASSERT((s == "true" || s == "false"), "Can't cast string " + s + " to bool");
     return Node(s == "true");
 }
 

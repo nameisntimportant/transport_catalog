@@ -38,17 +38,17 @@ void generalTest()
 {
     for (size_t i = 1; i < 2; i++)
     {
-        auto baseInput = openFileAsInputStream("../transport_catalog/testData/make_base_" +
+        auto baseRequestsInput = openFileAsInputStream("../transport_catalog/testData/make_base_" +
                                               to_string(i) + ".json");
-        const auto baseJsonTree = Json::load(baseInput);
-        const auto& baseMap = baseJsonTree.getRoot().asMap();
+        const auto baseRequestsJsonTree = Json::load(baseRequestsInput);
+        const auto& baseRequestsMap = baseRequestsJsonTree.getRoot().asMap();
         const auto baseRequests =
-            BaseRequests::parseRequests(baseMap.at("base_requests").asArray());
+            BaseRequests::parseRequests(baseRequestsMap.at("base_requests").asArray());
         const TransportCatalog database(baseRequests);
 
-        auto statRequestsBaseInput = openFileAsInputStream(
+        auto statRequestsInput = openFileAsInputStream(
             "../transport_catalog/testData/stat_requests_" + to_string(i) + ".json");
-        const auto statRequestsJsonTree = Json::load(statRequestsBaseInput);
+        const auto statRequestsJsonTree = Json::load(statRequestsInput);
         const auto& statRequestsMap = statRequestsJsonTree.getRoot().asMap();
         const auto& statRequests = statRequestsMap.at("stat_requests").asArray();
         const auto responses = StatRequests::processAll(database, statRequests);

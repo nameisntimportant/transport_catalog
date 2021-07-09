@@ -22,6 +22,7 @@ set (PROJECT_SRCS
     ${TESTS_DIRECTORY}/jsonTestSuite.cpp
     ${TESTS_DIRECTORY}/baseRequestsTestSuite.cpp
     ${TESTS_DIRECTORY}/sphereTestSuite.cpp
+    ${TESTS_DIRECTORY}/graphTestSuite.cpp
     ${UTILS_DIRECTORY}/utils.cpp)
 
 set (PROJECT_HDRS
@@ -30,9 +31,11 @@ set (PROJECT_HDRS
     ${SRC_DIRECTORY}/transportCatalog.h
     ${SRC_DIRECTORY}/sphere.h
     ${SRC_DIRECTORY}/statRequests.h
+    ${SRC_DIRECTORY}/graph.h
     ${TESTS_DIRECTORY}/jsonTestSuite.h
     ${TESTS_DIRECTORY}/baseRequestsTestSuite.h
     ${TESTS_DIRECTORY}/sphereTestSuite.h
+    ${TESTS_DIRECTORY}/graphTestSuite.h
     ${UTILS_DIRECTORY}/utils.h
     ${UTILS_DIRECTORY}/log.h
     ${UTILS_DIRECTORY}/testRunner.h)

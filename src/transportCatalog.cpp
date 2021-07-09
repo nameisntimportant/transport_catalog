@@ -15,7 +15,7 @@ TransportCatalog::TransportCatalog(const BaseRequests::ParsedRequests& data)
     for (const auto& bus : data.buses)
     {
         buses_[bus.name] =
-            Responses::Bus{bus.stops.size(),
+            Bus{bus.stops.size(),
                            calculateUniqueItemsCount(asRange(bus.stops)),
                            calculateRoadRouteLength(bus.stops, routeDistances),
                            calculateOrthodromicRouteLength(bus.stops, stopsCoordinates)};

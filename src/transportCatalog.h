@@ -27,15 +27,15 @@ struct Bus
 class TransportCatalog
 {
 private:
-    using Bus = BaseRequests::Bus;
-    using Stop = BaseRequests::Stop;
+    using Bus = Responses::Bus;
+    using Stop = Responses::Stop;
     using PointsMap = std::unordered_map<std::string, Sphere::Point>;
 
 public:
     TransportCatalog(const BaseRequests::ParsedRequests& data);
 
-    const Responses::Stop* getStop(const std::string& name) const;
-    const Responses::Bus* getBus(const std::string& name) const;
+    const Stop* getStop(const std::string& name) const;
+    const Bus* getBus(const std::string& name) const;
 
 private:
     static PointsMap getStopCoordinates(const BaseRequests::ParsedStops& stops);
@@ -46,6 +46,6 @@ private:
     static double calculateOrthodromicRouteLength(const std::vector<std::string>& stops,
                                                   const PointsMap& stopsCoordinates);
 
-    std::unordered_map<std::string, Responses::Stop> stops_;
-    std::unordered_map<std::string, Responses::Bus> buses_;
+    std::unordered_map<std::string, Stop> stops_;
+    std::unordered_map<std::string, Bus> buses_;
 };

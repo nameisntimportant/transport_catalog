@@ -18,7 +18,7 @@ using namespace std;
 ifstream openFileAsInputStream(const string& fileName, ios_base::openmode mode = ios::in)
 {
     ifstream fileStream(fileName, mode);
-    M_ASSERT(fileStream, ("can't open the file - it doesn't exist:" + fileName));
+    ASSERT_WITH_MESSAGE(fileStream, ("can't open the file - it doesn't exist:" + fileName));
     return fileStream;
 }
 

@@ -28,7 +28,7 @@ Node loadBool(istream& input)
     {
         s.push_back(input.get());
     }
-    M_ASSERT((s == "true" || s == "false"), "Can't cast string " + s + " to bool");
+    ASSERT_WITH_MESSAGE((s == "true" || s == "false"), "Can't cast string " + s + " to bool");
     return Node(s == "true");
 }
 

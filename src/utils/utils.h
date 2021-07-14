@@ -104,9 +104,14 @@ bool fuzzyCompare(double lhs, double rhs);
         throw std::runtime_error(str.str());                                                    \
     }
 
-#define M_ASSERT(expr, msg)                                                              \
+// Note about "!bool(expr)":
+// 1) The condition has to be parenthesized, but writing just "!(expr)" may cause GCC to crash when
+// "cond" is a variable name (see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=83204). The explicit
+// cast to bool serves as a workaround for the problem. 2) It has a benefit of its own since with
+// "bool(cond)" one can't accidentally write "ASSERT_WITH_MESSAGE(x = y)" instead of "ASSERT_WITH_MESSAGE(x == y)"
+#define ASSERT_WITH_MESSAGE(expr, msg)                                                            \
     {                                                                                  \
-        if (!expr)                                                                     \
+        if (!bool(expr))                                                               \
         {                                                                              \
             std::ostringstream str;                                                    \
             str << "assertion failed! " << __FILE__ << ':' << __LINE__ << ". " << msg; \

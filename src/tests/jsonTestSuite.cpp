@@ -216,17 +216,7 @@ void testNestedElementsLoading()
 void testInvalidInputException()
 {
     istringstream typoInput("fFalse");
-
-    bool isExceptionThrown = false;
-    try
-    {
-        load(typoInput).getRoot();
-    }
-    catch (...)
-    {
-        isExceptionThrown = true;
-    }
-    ASSERT(isExceptionThrown);
+    ASSERT_EXCEPTION_THROWN(load(typoInput), runtime_error);
 }
 
 void testPrint()

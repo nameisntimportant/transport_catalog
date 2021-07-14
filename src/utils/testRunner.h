@@ -142,7 +142,7 @@ public:
     template <class TestFunc>
     void RunTest(TestFunc func, const std::string& test_name)
     {
-        // TODO: let debugger catch the exception
+        // TODO: add flag, which will make RunTest not to catch exceptions, to let debugger catch it
         try
         {
             func();
@@ -150,28 +150,52 @@ public:
         }
         catch (std::exception& e)
         {
-            ++fail_count;
+            ++failCount;
             std::cerr << test_name << " fail: " << e.what() << std::endl;
         }
         catch (...)
         {
-            ++fail_count;
+            ++failCount;
             std::cerr << "Unknown exception caught" << std::endl;
         }
     }
 
     ~TestRunner()
     {
-        if (fail_count > 0)
+        if (failCount > 0)
         {
-            std::cerr << fail_count << " unit tests failed. Terminate" << std::endl;
+            std::cerr << failCount << " unit tests failed. Terminate" << std::endl;
             exit(1);
         }
     }
 
 private:
-    int fail_count = 0;
+    int failCount = 0;
 };
+
+#define ASSERT_EXCEPTION_THROWN(expression, exceptionType)                              \
+    {                                                                                   \
+        bool isExceptionThrown = false;                                                 \
+        try                                                                             \
+        {                                                                               \
+            expression;                                                                 \
+        }                                                                               \
+        catch (const exceptionType&)                                                    \
+        {                                                                               \
+            isExceptionThrown = true;                                                   \
+        }                                                                               \
+        catch (...)                                                                     \
+        {                                                                               \
+            std::ostringstream os;                                                      \
+            os << #expression << " hasn't thrown an expected exception " #exceptionType \
+               << __FILE__ << ":" << __LINE__;                                          \
+            Assert(false, os.str());                                                    \
+        }                                                                               \
+        std::ostringstream os;                                                          \
+        os << #expression << " was expected to throw an exception " << #exceptionType   \
+           << " but it hasn't thrown any exception. " << __FILE__ << ":" << __LINE__;   \
+        Assert(isExceptionThrown, os.str());                                            \
+    }
 
 #define ASSERT_DOUBLE_EQUAL(x, y)                                        \
     {                                                                    \

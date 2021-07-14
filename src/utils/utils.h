@@ -31,6 +31,43 @@ private:
     It end_;
 };
 
+template <typename It>
+bool operator==(const Range<It>& lhs, const Range<It>& rhs)
+{
+    if (std::distance(lhs.begin(), lhs.end()) != std::distance(rhs.begin(), rhs.end()))
+    {
+        return false;
+    }
+
+    auto rhsIt = rhs.begin();
+    for (auto lhsIt = lhs.begin(); lhsIt != lhs.end();
+         lhsIt = std::next(lhsIt), rhsIt = std::next(rhsIt))
+    {
+        if (*lhsIt != *rhsIt)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+template <typename It>
+std::ostream& operator<<(std::ostream& stream, const Range<It>& range)
+{
+    stream << "{";
+    bool isFirst = true;
+    for (const auto& item : range)
+    {
+        if (!isFirst)
+        {
+            stream << ", ";
+        }
+        isFirst = false;
+        stream << item;
+    }
+    return stream << "}";
+}
+
 template <typename C>
 auto asRange(const C& container)
 {

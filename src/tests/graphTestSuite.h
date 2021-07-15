@@ -4,6 +4,6 @@ namespace Graph
 {
 namespace Tests
 {
-void run();
+void runGraphTests();
 } // namespace Tests
 } // namespace Graph

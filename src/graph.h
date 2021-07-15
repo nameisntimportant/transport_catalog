@@ -45,7 +45,7 @@ public:
     size_t getVertexCount() const;
     size_t getEdgeCount() const;
     const Edge<Weight>& getEdge(EdgeId edgeId) const;
-    VertexesRange edgesWhichStartFrom(VertexId vertex) const;
+    VertexesRange getEdgesWhichStartFrom(VertexId vertex) const;
 
 private:
     std::vector<Edge<Weight>> edges_;
@@ -87,7 +87,7 @@ const Edge<Weight>& DirectedWeightedGraph<Weight>::getEdge(EdgeId edgeId) const
 
 template <typename Weight>
 typename DirectedWeightedGraph<Weight>::VertexesRange DirectedWeightedGraph<
-    Weight>::edgesWhichStartFrom(VertexId vertex) const
+    Weight>::getEdgesWhichStartFrom(VertexId vertex) const
 {
     const auto& edges = vertexes_[vertex];
     return {std::begin(edges), std::end(edges)};

@@ -26,8 +26,8 @@ void testDifferentWeightDependingOnDirection()
     ASSERT_EQUAL(graph.getEdge(0), Edge<int>({.from = 0, .to = 1, .weight = -3124}));
     ASSERT_EQUAL(graph.getEdge(1), Edge<int>({.from = 1, .to = 0, .weight = 4951335}));
 
-    ASSERT_EQUAL(graph.edgesWhichStartFrom(0), asRange(vector<EdgeId>{0}));
-    ASSERT_EQUAL(graph.edgesWhichStartFrom(1), asRange(vector<EdgeId>{1}));
+    ASSERT_EQUAL(graph.getEdgesWhichStartFrom(0), asRange(vector<EdgeId>{0}));
+    ASSERT_EQUAL(graph.getEdgesWhichStartFrom(1), asRange(vector<EdgeId>{1}));
 
     ASSERT_EQUAL(graph.getVertexCount(), 2);
     ASSERT_EQUAL(graph.getEdgeCount(), 2);
@@ -50,18 +50,18 @@ void testGraphWithSeveralVertexesAndEdges()
     ASSERT_EQUAL(graph.getEdge(4), Edge<float>({.from = 0, .to = 3, .weight = 6.8465}));
     ASSERT_EQUAL(graph.getEdge(5), Edge<float>({.from = 3, .to = 0, .weight = 6.2873}));
 
-    ASSERT_EQUAL(graph.edgesWhichStartFrom(0), asRange(vector<EdgeId>{4}));
-    ASSERT_EQUAL(graph.edgesWhichStartFrom(1), asRange(vector<EdgeId>{3}));
-    ASSERT_EQUAL(graph.edgesWhichStartFrom(2), asRange(vector<EdgeId>{2}));
-    ASSERT_EQUAL(graph.edgesWhichStartFrom(3), asRange(vector<EdgeId>{0, 5}));
-    ASSERT_EQUAL(graph.edgesWhichStartFrom(4), asRange(vector<EdgeId>{1}));
-    ASSERT_EQUAL(graph.edgesWhichStartFrom(5), asRange(vector<EdgeId>{}));
+    ASSERT_EQUAL(graph.getEdgesWhichStartFrom(0), asRange(vector<EdgeId>{4}));
+    ASSERT_EQUAL(graph.getEdgesWhichStartFrom(1), asRange(vector<EdgeId>{3}));
+    ASSERT_EQUAL(graph.getEdgesWhichStartFrom(2), asRange(vector<EdgeId>{2}));
+    ASSERT_EQUAL(graph.getEdgesWhichStartFrom(3), asRange(vector<EdgeId>{0, 5}));
+    ASSERT_EQUAL(graph.getEdgesWhichStartFrom(4), asRange(vector<EdgeId>{1}));
+    ASSERT_EQUAL(graph.getEdgesWhichStartFrom(5), asRange(vector<EdgeId>{}));
 
     ASSERT_EQUAL(graph.getVertexCount(), 6);
     ASSERT_EQUAL(graph.getEdgeCount(), 6);
 }
 
-void run()
+void runGraphTests()
 {
     TestRunner tr;
     RUN_TEST(tr, testEmptyGraph);

@@ -10,6 +10,7 @@
 #include "tests/baseRequestsTestSuite.h"
 #include "tests/sphereTestSuite.h"
 #include "tests/graphTestSuite.h"
+#include "tests/routerTestSuite.h"
 
 #include <fstream>
 
@@ -68,7 +69,8 @@ void runTests()
     Json::Tests::run();
     BaseRequests::Tests::run();
     Sphere::Tests::run();
-    Graph::Tests::run();
+    Graph::Tests::runGraphTests();
+    Graph::Tests::runRouterTests();
 
     TestRunner tr;
     RUN_TEST(tr, generalTest);

@@ -15,7 +15,7 @@ const Json::Map NotFoundErrorResponse = {{"error_message"s, Json::Node("not foun
 
 namespace StatRequests
 {
-variant<Stop, Bus> read(const Json::Map& attrs)
+variant<Stop, Bus, Route> read(const Json::Map& attrs)
 {
     const string& type = attrs.at("type").asString();
     if (type == "Bus")
@@ -25,6 +25,10 @@ variant<Stop, Bus> read(const Json::Map& attrs)
     else if (type == "Stop")
     {
         return Stop{attrs.at("name").asString()};
+    }
+    else if (type == "Route")
+    {
+        return Route{attrs.at("from").asString(), attrs.at("to").asString()};
     }
     UNREACHABLE("unknown type of request: "s + type);
 }
@@ -69,14 +73,46 @@ Json::Array processAll(const TransportCatalog& database, const Json::Array& requ
                         {"curvature",
                          Json::Node(bus->roadRouteLength / bus->orthodromicRouteLength)},
                     };
+                },
+                [&database](const Route& routeRequest) {
+                    const auto route = database.findRoute(routeRequest.from, routeRequest.to);
+                    if (!route)
+                    {
+                        return NotFoundErrorResponse;
+                    }
+
+                    Json::Map dict;
+                    dict["total_time"] = Json::Node(route->totalTime);
+                    Json::Array items;
+                    items.reserve(route->routeElements.size());
+
+                    for (const auto& element : route->routeElements)
+                    {
+                        visit(make_visitor(
+                                  [&items](const TransportRouter::WaitRouteElement& waitElement) {
+                                      items.push_back(
+                                          Json::Map{{"type", Json::Node("Wait"s)},
+                                                    {"stop_name", Json::Node(waitElement.stopName)},
+                                                    {"time", Json::Node(waitElement.time)}});
+                                  },
+                                  [&items](const TransportRouter::BusRouteElement& busElement) {
+                                      items.push_back(Json::Map{
+                                          {"type", Json::Node("Bus"s)},
+                                          {"bus", Json::Node(busElement.bus)},
+                                          {"time", Json::Node(busElement.time)},
+                                          {"span_count",
+                                           Json::Node(static_cast<int>(busElement.spanCount))}});
+                                  }),
+                              element);
+                    }
+                    dict["items"] = move(items);
+                    return dict;
                 }),
             request);
 
         responseDict["request_id"] = Json::Node(rn.asMap().at("id").asInt());
         responses.push_back(Json::Node(responseDict));
     }
-
     return responses;
 }
-
 } // namespace StatRequests

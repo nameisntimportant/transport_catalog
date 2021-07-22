@@ -29,7 +29,7 @@ void assertEdgesInRouteAreEqualTo(const Router<Weight>& router,
     }
     ASSERT_EQUAL(actualEdges, expectedEdges);
 }
-constexpr auto NoRoute = optional<RouteInfo>();
+constexpr auto EmptyRouteInfo = optional<RouteInfo>();
 } // namespace
 
 void testBuildNonExistingRoute()
@@ -37,7 +37,7 @@ void testBuildNonExistingRoute()
     DirectedWeightedGraph<double> graph(2);
     graph.addEdge({1, 0, 23.44});
     Router<double> router(graph);
-    ASSERT_EQUAL(router.buildRoute(0, 1), NoRoute);
+    ASSERT_EQUAL(router.buildRoute(0, 1), EmptyRouteInfo);
 }
 
 void testTwoDifferentEdgesBetweenOnePairOfVertexes()
@@ -51,7 +51,7 @@ void testTwoDifferentEdgesBetweenOnePairOfVertexes()
     ASSERT_EQUAL(router.buildRoute(0, 1), expected);
     ASSERT_EQUAL(router.getRouteEdge(expected.id, 0), 1);
 
-    ASSERT_EQUAL(router.buildRoute(1, 0), NoRoute);
+    ASSERT_EQUAL(router.buildRoute(1, 0), EmptyRouteInfo);
 }
 
 void testBuildRouteFromTheVertexToTheSameVertex()
@@ -116,7 +116,6 @@ void testGraphWithSeveralVetexesAndEdges()
     graph.addEdge({3, 6, 0.114});
     graph.addEdge({5, 3, 9.221});
     Router<double> router(graph);
-
 
     ASSERT_EQUAL(router.buildRoute(0, 1), RouteInfo({.id = 0, .weight = 114.7, .edgeCount = 1}));
     ASSERT_EQUAL(router.getRouteEdge(0, 0), 0);
@@ -187,10 +186,10 @@ void testGraphWithSeveralVetexesAndEdges()
         assertEdgesInRouteAreEqualTo(router, route, {2, 6});
     }
 
-    ASSERT_EQUAL(router.buildRoute(2, 1), NoRoute);
-    ASSERT_EQUAL(router.buildRoute(3, 1), NoRoute);
-    ASSERT_EQUAL(router.buildRoute(2, 0), NoRoute);
-    ASSERT_EQUAL(router.buildRoute(2, 7), NoRoute);
+    ASSERT_EQUAL(router.buildRoute(2, 1), EmptyRouteInfo);
+    ASSERT_EQUAL(router.buildRoute(3, 1), EmptyRouteInfo);
+    ASSERT_EQUAL(router.buildRoute(2, 0), EmptyRouteInfo);
+    ASSERT_EQUAL(router.buildRoute(2, 7), EmptyRouteInfo);
 }
 
 void testReleaseRoute()

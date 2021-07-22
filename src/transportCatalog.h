@@ -3,6 +3,7 @@
 #include "baseRequests.h"
 #include "routeDistancesDict.h"
 #include "sphere.h"
+#include "transportRouter.h"
 
 #include <set>
 #include <string>
@@ -22,6 +23,8 @@ struct Bus
     size_t roadRouteLength = 0;
     double orthodromicRouteLength = 0.0;
 };
+
+using Route = std::optional<TransportRouter::RouteStats>;
 } // namespace Responses
 
 class TransportCatalog
@@ -29,13 +32,15 @@ class TransportCatalog
 private:
     using Bus = Responses::Bus;
     using Stop = Responses::Stop;
+    using Route = Responses::Route;
     using PointsMap = std::unordered_map<std::string, Sphere::Point>;
 
 public:
-    TransportCatalog(const BaseRequests::ParsedRequests& data);
+    TransportCatalog(const BaseRequests::ParsedRequests& data, const Json::Map& routingSettings);
 
     const Stop* getStop(const std::string& name) const;
     const Bus* getBus(const std::string& name) const;
+    Route findRoute(const std::string& from, const std::string& to) const;
 
 private:
     static PointsMap getStopCoordinates(const BaseRequests::ParsedStops& stops);
@@ -46,6 +51,7 @@ private:
     static double calculateOrthodromicRouteLength(const std::vector<std::string>& stops,
                                                   const PointsMap& stopsCoordinates);
 
+    std::unique_ptr<TransportRouter> router_;
     std::unordered_map<std::string, Stop> stops_;
     std::unordered_map<std::string, Bus> buses_;
 };

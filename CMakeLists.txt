@@ -19,11 +19,13 @@ set (PROJECT_SRCS
     ${SRC_DIRECTORY}/transportCatalog.cpp
     ${SRC_DIRECTORY}/sphere.cpp
     ${SRC_DIRECTORY}/statRequests.cpp
+    ${SRC_DIRECTORY}/transportRouter.cpp
     ${TESTS_DIRECTORY}/jsonTestSuite.cpp
     ${TESTS_DIRECTORY}/baseRequestsTestSuite.cpp
     ${TESTS_DIRECTORY}/sphereTestSuite.cpp
     ${TESTS_DIRECTORY}/graphTestSuite.cpp
     ${TESTS_DIRECTORY}/routerTestSuite.cpp
+    ${TESTS_DIRECTORY}/transportRouterTestSuite.cpp
     ${UTILS_DIRECTORY}/utils.cpp)
 
 set (PROJECT_HDRS
@@ -34,13 +36,18 @@ set (PROJECT_HDRS
     ${SRC_DIRECTORY}/statRequests.h
     ${SRC_DIRECTORY}/graph.h
     ${SRC_DIRECTORY}/router.h
+    ${SRC_DIRECTORY}/routeDistancesDict.h
+    ${SRC_DIRECTORY}/transportRouter.h
     ${TESTS_DIRECTORY}/jsonTestSuite.h
     ${TESTS_DIRECTORY}/baseRequestsTestSuite.h
     ${TESTS_DIRECTORY}/sphereTestSuite.h
     ${TESTS_DIRECTORY}/graphTestSuite.h
     ${TESTS_DIRECTORY}/routerTestSuite.h
+    ${TESTS_DIRECTORY}/transportRouterTestSuite.h
     ${UTILS_DIRECTORY}/utils.h
     ${UTILS_DIRECTORY}/log.h
-    ${UTILS_DIRECTORY}/testRunner.h)
+    ${UTILS_DIRECTORY}/testRunner.h
+    ${UTILS_DIRECTORY}/makeVisitor.h
+    ${UTILS_DIRECTORY}/profiler.h)
 
 add_executable(${PROJECT_NAME} ${PROJECT_SRCS} ${PROJECT_HDRS})

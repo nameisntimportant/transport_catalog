@@ -3,8 +3,9 @@
 
 using namespace std;
 
-TransportCatalog::TransportCatalog(const BaseRequests::ParsedRequests& data)
+TransportCatalog::TransportCatalog(const BaseRequests::ParsedRequests& data, const Json::Map& routingSettings)
 {
+    LOG_DURATION("TransportCatalog ctor");
     for (const auto& stop : data.stops)
     {
         stops_.insert({stop.name, {}});
@@ -25,6 +26,8 @@ TransportCatalog::TransportCatalog(const BaseRequests::ParsedRequests& data)
             stops_.at(stopName).busNames.insert(bus.name);
         }
     }
+
+    router_ = make_unique<TransportRouter>(data.buses, routeDistances, routingSettings);
 }
 
 const Responses::Stop* TransportCatalog::getStop(const string& name) const
@@ -35,6 +38,11 @@ const Responses::Stop* TransportCatalog::getStop(const string& name) const
 const Responses::Bus* TransportCatalog::getBus(const string& name) const
 {
     return getValuePointer(buses_, name);
+}
+
+Responses::Route TransportCatalog::findRoute(const std::string& from, const std::string& to) const
+{
+    return router_->findRoute(from, to);
 }
 
 TransportCatalog::PointsMap TransportCatalog::getStopCoordinates(

@@ -2,6 +2,7 @@
 
 #include "utils.h"
 #include "graph.h"
+#include "profiler.h"
 
 #include <algorithm>
 
@@ -62,6 +63,8 @@ Router<Weight>::Router(const Graph& graph)
     , routesInternalData_(graph.getVertexCount(),
                           std::vector<std::optional<RouteInternalData>>(graph.getVertexCount()))
 {
+    LOG_DURATION("Router ctor");
+
     initializeRoutesInternalData();
 
     const size_t vertexCount = graph.getVertexCount();
@@ -165,12 +168,12 @@ void Router<Weight>::releaseRoute(RouteId routeId)
     expandedRoutesCache_.erase(routeId);
 }
 
-bool operator==(const typename Router<double>::RouteInfo& lhs, const typename Router<double>::RouteInfo& rhs)
+inline bool operator==(const typename Router<double>::RouteInfo& lhs, const typename Router<double>::RouteInfo& rhs)
 {
     return lhs.id == rhs.id && fuzzyCompare(lhs.weight, rhs.weight) && lhs.edgeCount == rhs.edgeCount;
 }
 
-std::ostream& operator<<(std::ostream& stream, const std::optional<typename Router<double>::RouteInfo>& routeInfoOpt)
+inline std::ostream& operator<<(std::ostream& stream, const std::optional<typename Router<double>::RouteInfo>& routeInfoOpt)
 {
     if (!routeInfoOpt)
     {

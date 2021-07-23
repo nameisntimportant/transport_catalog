@@ -18,20 +18,14 @@
 class TransportRouter
 {
 public:
-    struct BusRouteElement
+    struct RouteElement
     {
+        int waitTime;
         std::string bus;
+        std::string from;
         size_t spanCount;
-        double time;
+        double transitTime;
     };
-
-    struct WaitRouteElement
-    {
-        double time;
-        std::string stopName;
-    };
-
-    using RouteElement = std::variant<WaitRouteElement, BusRouteElement>;
 
     struct RouteStats
     {
@@ -44,16 +38,6 @@ private:
     using RoutesGraphPtr = std::unique_ptr<RoutesGraph>;
     using Router = Graph::Router<double>;
     using RouterPtr = std::unique_ptr<Router>;
-
-    using NameAndTime = std::pair<std::string, double>;
-
-    struct RouterData
-    {
-        std::unordered_map<std::string, Graph::VertexId> fromUniqueStopToVertexId;
-        std::unordered_map<std::string, Graph::VertexId> fromNonUniqueStopToTransferVertexId;
-        std::unordered_map<Graph::EdgeId, NameAndTime> fromEdgeToNameAndTime;
-        std::unordered_set<Graph::EdgeId> transferEdges;
-    };
 
     struct RoutingSettings
     {
@@ -69,41 +53,35 @@ public:
     std::optional<RouteStats> findRoute(const std::string& from, const std::string& to) const;
 
 private:
-    static std::tuple<RoutesGraphPtr, RouterData> buildRouteGraph(
-        const BaseRequests::ParsedBuses& buses,
-        const RouteDistancesMap& routeDistances,
-        const RoutingSettings& routingSettings);
+    void createGraph(const BaseRequests::ParsedBuses& buses);
+    void fillGraphWithEdges(const BaseRequests::ParsedBuses& buses,
+                            const RouteDistancesMap& routeDistances,
+                            const RoutingSettings& routingSettings);
 
-    Graph::VertexId getVertexId(const std::string& stopName) const;
-    NameAndTime getNameAndTime(Graph::EdgeId edgeId) const;
-    bool isTransferEdge(Graph::EdgeId edgeId) const;
-    bool containsStop(const std::string &stopName) const;
+    static RoutingSettings makeRoutingSettings(const Json::Map& routingSettingsMap);
 
 private:
     RoutesGraphPtr graph_;
     RouterPtr router_;
-    RouterData data_;
 
     std::unordered_map<std::string, Graph::VertexId> stopToVertex_;
     std::unordered_map<Graph::EdgeId, RouteElement> edgeToRouteElement_;
 
     RoutingSettings routingSettings_;
 
-    friend void Tests::testBuildRouteGraph();
     friend void Tests::testFindRoute();
 };
 
-inline bool operator==(const TransportRouter::WaitRouteElement& lhs, const TransportRouter::WaitRouteElement& rhs)
+// TODO move it to .cpp or separated test project
+inline bool operator==(const TransportRouter::RouteElement& lhs,
+                       const TransportRouter::RouteElement& rhs)
 {
-    return lhs.stopName == rhs.stopName && fuzzyCompare(lhs.time, rhs.time);
+    return lhs.waitTime == rhs.waitTime && lhs.bus == rhs.bus && lhs.from == rhs.from &&
+           lhs.spanCount == rhs.spanCount && fuzzyCompare(lhs.transitTime, rhs.transitTime);
 }
 
-inline bool operator==(const TransportRouter::BusRouteElement& lhs, const TransportRouter::BusRouteElement& rhs)
-{
-    return lhs.bus == rhs.bus && lhs.spanCount == rhs.spanCount && fuzzyCompare(lhs.time, rhs.time);
-}
-
-inline bool operator==(const TransportRouter::RouteStats& lhs, const TransportRouter::RouteStats& rhs)
+inline bool operator==(const TransportRouter::RouteStats& lhs,
+                       const TransportRouter::RouteStats& rhs)
 {
     if (lhs.routeElements.size() != rhs.routeElements.size())
     {
@@ -119,22 +97,14 @@ inline bool operator==(const TransportRouter::RouteStats& lhs, const TransportRo
     return fuzzyCompare(lhs.totalTime, rhs.totalTime);
 }
 
-inline std::ostream& operator<<(std::ostream& stream, const TransportRouter::RouteStats& lhs)
+inline std::ostream& operator<<(std::ostream& stream, const TransportRouter::RouteStats& stats)
 {
-    stream << "total time " << lhs.totalTime;
+    stream << "total time " << stats.totalTime;
     stream << " route elements { ";
-    for (const auto& item : lhs.routeElements)
+    for (const auto& element : stats.routeElements)
     {
-        std::visit(make_visitor(
-                       [&stream](const TransportRouter::WaitRouteElement& element) {
-                           stream << "Wait: stop name " << element.stopName << " time "
-                                  << element.time << ".";
-                       },
-                       [&stream](const TransportRouter::BusRouteElement& element) {
-                           stream << "Bus: bus name " << element.bus << " span count " << element.spanCount << " time " << element.time << ".";
-                       }),
-                   item);
-        stream << " ";
+        stream << "wait time " << element.waitTime << " bus " << element.bus << " from " << element.from
+               << " span count " << element.spanCount << " transit time " << element.transitTime << ". ";
     }
     return stream << "}";
 }

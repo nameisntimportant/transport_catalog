@@ -38,6 +38,7 @@ Json::Array processAll(const TransportCatalog& database, const Json::Array& requ
     Json::Array responses;
     responses.reserve(requestNodes.size());
 
+    // TODO: split the logic of processing different requests
     for (const Json::Node& rn : requestNodes)
     {
         const auto request = read(rn.asMap());
@@ -85,27 +86,24 @@ Json::Array processAll(const TransportCatalog& database, const Json::Array& requ
                     dict["total_time"] = Json::Node(route->totalTime);
                     Json::Array items;
                     items.reserve(route->routeElements.size());
-
                     for (const auto& element : route->routeElements)
                     {
-                        visit(make_visitor(
-                                  [&items](const TransportRouter::WaitRouteElement& waitElement) {
-                                      items.push_back(
-                                          Json::Map{{"type", Json::Node("Wait"s)},
-                                                    {"stop_name", Json::Node(waitElement.stopName)},
-                                                    {"time", Json::Node(waitElement.time)}});
-                                  },
-                                  [&items](const TransportRouter::BusRouteElement& busElement) {
-                                      items.push_back(Json::Map{
-                                          {"type", Json::Node("Bus"s)},
-                                          {"bus", Json::Node(busElement.bus)},
-                                          {"time", Json::Node(busElement.time)},
-                                          {"span_count",
-                                           Json::Node(static_cast<int>(busElement.spanCount))}});
-                                  }),
-                              element);
+                        auto waitElement = Json::Map{{"type", Json::Node("Wait"s)},
+                                                     {"stop_name", Json::Node(element.from)},
+                                                     {"time", Json::Node(element.waitTime)}};
+                        items.push_back(std::move(waitElement));
+
+                        auto busElement = Json::Map{
+                            {"type", Json::Node("Bus"s)},
+                            {"bus", Json::Node(element.bus)},
+                            {"time", Json::Node(element.transitTime)},
+                            {"span_count", Json::Node(static_cast<int>(element.spanCount))}};
+
+                        items.push_back(std::move(busElement));
                     }
+
                     dict["items"] = move(items);
+
                     return dict;
                 }),
             request);

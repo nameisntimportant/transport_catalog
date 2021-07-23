@@ -2,7 +2,6 @@
 
 namespace Tests
 {
-void testBuildRouteGraph();
 void testFindRoute();
 void runTransportRouterTests();
 }

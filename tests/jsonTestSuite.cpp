@@ -1,5 +1,5 @@
-#include "../json.h"
-#include "log.h"
+#include "json.h"
+#include "jsonTestSuite.h"
 #include "testRunner.h"
 
 using namespace std;
@@ -7,8 +7,8 @@ using namespace std;
 namespace
 {
 void assertIsNotAllTypesExcept(const Json::Node& node,
-                               const std::string& exceptedType,
-                               const std::string& anotherExceptedType = "")
+                               const string& exceptedType,
+                               const string& anotherExceptedType = "")
 {
     if (exceptedType != "int" && anotherExceptedType != "int")
     {
@@ -54,11 +54,11 @@ void testSingleElementLoading()
         assertIsNotAllTypesExcept(ssRoot, "string");
         ASSERT_EQUAL(ssRoot.asString(), "simpleString");
 
-        istringstream ssww("\"simple string with witespaces\"");
+        istringstream ssww("\"simple string with whitespaces\"");
         const auto sswwRoot = load(ssww).getRoot();
         ASSERT(sswwRoot.isString());
         assertIsNotAllTypesExcept(ssRoot, "string");
-        ASSERT_EQUAL(sswwRoot.asString(), "simple string with witespaces");
+        ASSERT_EQUAL(sswwRoot.asString(), "simple string with whitespaces");
     }
 
     {
@@ -76,21 +76,21 @@ void testSingleElementLoading()
         assertIsNotAllTypesExcept(negativeNRoot, "int", "double");
         ASSERT_EQUAL(negativeNRoot.asInt(), -2400234);
 
-        istringstream maxN(std::to_string(std::numeric_limits<int>::max()));
+        istringstream maxN(to_string(numeric_limits<int>::max()));
         auto maxNRoot = Json::load(maxN).getRoot();
         ASSERT(maxNRoot.isInt());
         ASSERT(maxNRoot.isDouble());
         assertIsNotAllTypesExcept(negativeNRoot, "int", "double");
-        ASSERT_EQUAL(maxNRoot.asInt(), std::numeric_limits<int>::max());
+        ASSERT_EQUAL(maxNRoot.asInt(), numeric_limits<int>::max());
 
-        istringstream minN(std::to_string(std::numeric_limits<int>::min()));
+        istringstream minN(to_string(numeric_limits<int>::min()));
         auto minNRoot = Json::load(minN).getRoot();
         ASSERT(minNRoot.isInt());
         ASSERT(minNRoot.isDouble());
         assertIsNotAllTypesExcept(minNRoot, "int", "double");
-        ASSERT_EQUAL(minNRoot.asInt(), std::numeric_limits<int>::min());
+        ASSERT_EQUAL(minNRoot.asInt(), numeric_limits<int>::min());
 
-        istringstream zero(std::to_string(0));
+        istringstream zero(to_string(0));
         auto zeroRoot = Json::load(zero).getRoot();
         ASSERT(zeroRoot.isInt());
         ASSERT(zeroRoot.isDouble());
@@ -120,21 +120,21 @@ void testSingleElementLoading()
         assertIsNotAllTypesExcept(smallNRoot, "double", "pureDouble");
         ASSERT_DOUBLE_EQUAL(smallNRoot.asDouble(), 0.000001);
 
-        istringstream maxN(std::to_string(std::numeric_limits<int>::max()));
+        istringstream maxN(to_string(numeric_limits<int>::max()));
         auto maxNRoot = Json::load(maxN).getRoot();
         ASSERT(maxNRoot.isDouble());
         ASSERT(maxNRoot.isInt());
         assertIsNotAllTypesExcept(maxNRoot, "double", "int");
-        ASSERT_DOUBLE_EQUAL(maxNRoot.asDouble(), std::numeric_limits<int>::max());
+        ASSERT_DOUBLE_EQUAL(maxNRoot.asDouble(), numeric_limits<int>::max());
 
-        istringstream minN(std::to_string(std::numeric_limits<int>::min()));
+        istringstream minN(to_string(numeric_limits<int>::min()));
         auto minNRoot = Json::load(minN).getRoot();
         ASSERT(minNRoot.isDouble());
         ASSERT(minNRoot.isInt());
         assertIsNotAllTypesExcept(minNRoot, "double", "int");
-        ASSERT_DOUBLE_EQUAL(minNRoot.asDouble(), std::numeric_limits<int>::min());
+        ASSERT_DOUBLE_EQUAL(minNRoot.asDouble(), numeric_limits<int>::min());
 
-        istringstream zero(std::to_string(0));
+        istringstream zero(to_string(0));
         auto zeroRoot = Json::load(zero).getRoot();
         ASSERT(zeroRoot.isDouble());
         ASSERT(zeroRoot.isInt());

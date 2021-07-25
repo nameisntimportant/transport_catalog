@@ -9,8 +9,6 @@
 #include "makeVisitor.h"
 #include "profiler.h"
 
-#include "tests/transportRouterTestSuite.h"
-
 #include <memory>
 #include <unordered_map>
 #include <vector>
@@ -68,8 +66,6 @@ private:
     std::unordered_map<Graph::EdgeId, RouteElement> edgeToRouteElement_;
 
     RoutingSettings routingSettings_;
-
-    friend void Tests::testFindRoute();
 };
 
 // TODO move it to .cpp or separated test project

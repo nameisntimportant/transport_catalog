@@ -1,8 +1,6 @@
-#include "../graph.h"
+#include "graph.h"
+#include "graphTestSuite.h"
 #include "testRunner.h"
-#include "utils.h"
-
-#include <vector>
 
 using namespace std;
 

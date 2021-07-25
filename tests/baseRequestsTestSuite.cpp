@@ -1,7 +1,7 @@
 #include "baseRequestsTestSuite.h"
 
-#include "../baseRequests.h"
-#include "../json.h"
+#include "baseRequests.h"
+#include "json.h"
 
 #include "testRunner.h"
 

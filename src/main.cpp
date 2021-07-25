@@ -7,13 +7,6 @@
 
 #include "profiler.h"
 #include "testRunner.h"
-#include "tests/baseRequestsTestSuite.h"
-#include "tests/graphTestSuite.h"
-#include "tests/jsonTestSuite.h"
-#include "tests/routerTestSuite.h"
-#include "tests/sphereTestSuite.h"
-#include "tests/transportRouterTestSuite.h"
-
 #include <fstream>
 
 using namespace std;
@@ -76,18 +69,6 @@ void generalTest()
     }
 }
 
-void runTests()
-{
-    Json::Tests::run();
-    BaseRequests::Tests::run();
-    Sphere::Tests::run();
-    Graph::Tests::runGraphTests();
-    Graph::Tests::runRouterTests();
-    Tests::runTransportRouterTests();
-
-    TestRunner tr;
-    RUN_TEST(tr, generalTest);
-}
 
 int main(int argc, const char* argv[])
 {

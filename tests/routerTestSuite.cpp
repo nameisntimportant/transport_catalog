@@ -1,10 +1,6 @@
-#include "../router.h"
-
+#include "router.h"
+#include "routerTestSuite.h"
 #include "testRunner.h"
-#include "utils.h"
-
-#include <exception>
-#include <vector>
 
 using namespace std;
 
@@ -30,6 +26,7 @@ void assertEdgesInRouteAreEqualTo(const Router<Weight>& router,
     ASSERT_EQUAL(actualEdges, expectedEdges);
 }
 constexpr auto EmptyRouteInfo = optional<RouteInfo>();
+
 } // namespace
 
 void testBuildNonExistingRoute()

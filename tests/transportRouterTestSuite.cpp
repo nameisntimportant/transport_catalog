@@ -1,6 +1,6 @@
 #include "transportRouterTestSuite.h"
-#include "../transportRouter.h"
 #include "testRunner.h"
+#include "transportRouter.h"
 
 using namespace std;
 
@@ -11,6 +11,8 @@ namespace
 {
 const auto EmptyRouteOptional = optional<RouteStats>();
 }
+
+// TODO: split into two functions
 namespace Tests
 {
 void testFindRoute()

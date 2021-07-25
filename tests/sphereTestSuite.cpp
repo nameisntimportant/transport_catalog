@@ -1,4 +1,4 @@
-#include "../sphere.h"
+#include "sphere.h"
 #include "log.h"
 #include "random"
 #include "testRunner.h"
@@ -74,6 +74,7 @@ void testOrthodromicDistance()
         AssertEqual(distance({ranLa1, ranLo1}, {ranLa1, ranLo1}), 0.0, description.str());
     }
 }
+
 void run()
 {
     TestRunner tr;

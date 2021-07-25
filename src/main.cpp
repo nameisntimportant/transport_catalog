@@ -1,12 +1,9 @@
 #include "baseRequests.h"
 #include "json.h"
-#include "log.h"
 #include "statRequests.h"
 #include "transportCatalog.h"
 #include "utils.h"
 
-#include "profiler.h"
-#include "testRunner.h"
 #include <fstream>
 
 using namespace std;
@@ -29,50 +26,21 @@ string readWholeFile(const string& fileName)
     return data;
 }
 
-// TODO: move it to a python script
-void generalTest()
-{
-    for (size_t i = 1; i < 3; i++)
-    {
-        LOG_DURATION("testcase# " + to_string(i) + " total");
-        unique_ptr<TransportCatalog> database;
-
-        {
-            LOG_DURATION("creating database");
-            auto baseRequestsInput = openFileAsInputStream(
-                "../transport_catalog/testData/base_requests_" + to_string(i) + ".json");
-            const auto baseRequestsJsonTree = Json::load(baseRequestsInput);
-            const auto& baseRequestsMap = baseRequestsJsonTree.getRoot().asMap();
-            const auto baseRequests =
-                BaseRequests::parseRequests(baseRequestsMap.at("base_requests").asArray());
-            const auto& routingSettings = baseRequestsMap.at("routing_settings").asMap();
-            database = make_unique<TransportCatalog>(baseRequests, routingSettings);
-        }
-
-        ostringstream output;
-        {
-            LOG_DURATION("processing requests");
-            auto statRequestsInput = openFileAsInputStream(
-                "../transport_catalog/testData/stat_requests_" + to_string(i) + ".json");
-            const auto statRequestsJsonTree = Json::load(statRequestsInput);
-            const auto& statRequestsMap = statRequestsJsonTree.getRoot().asMap();
-            const auto& statRequests = statRequestsMap.at("stat_requests").asArray();
-            const auto responses = StatRequests::processAll(*database, statRequests);
-
-            Json::printValue(responses, output);
-            output << endl;
-        }
-
-        string expectedOutput =
-            readWholeFile("../transport_catalog/testData/expected_" + to_string(i) + ".json");
-        ASSERT_EQUAL(expectedOutput, output.str());
-    }
-}
-
-
 int main(int argc, const char* argv[])
 {
-    runTests();
+    const auto baseRequestsJsonTree = Json::load(cin);
+    const auto& baseRequestsMap = baseRequestsJsonTree.getRoot().asMap();
+    const auto baseRequests =
+        BaseRequests::parseRequests(baseRequestsMap.at("base_requests").asArray());
+    const auto& routingSettings = baseRequestsMap.at("routing_settings").asMap();
+    TransportCatalog database(baseRequests, routingSettings);
+
+    const auto statRequestsJsonTree = Json::load(cin);
+    const auto& statRequestsMap = statRequestsJsonTree.getRoot().asMap();
+    const auto& statRequests = statRequestsMap.at("stat_requests").asArray();
+    const auto responses = StatRequests::processAll(database, statRequests);
+    Json::printValue(responses, cout);
+    cout << endl;
 
     return 0;
 }

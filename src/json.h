@@ -13,7 +13,7 @@ class Node;
 using Array = std::vector<Node>;
 using Map = std::map<std::string, Node>;
 
-class Node final : std::variant<Map, std::string, Array, int, double, bool>
+class Node final : public std::variant<Map, std::string, Array, int, double, bool>
 {
 public:
     using variant::variant;
@@ -80,9 +80,6 @@ public:
         return std::get<bool>(*this);
     }
 };
-bool operator==(const Map& lhs, const Map& rhs);
-bool operator==(const Array& lhs, const Array& rhs);
-bool operator==(const Node& lhs, const Node& rhs);
 
 class JsonTree
 {
@@ -106,7 +103,6 @@ Node loadNode(std::istream& input);
 JsonTree load(std::istream& input);
 
 void printNode(const Node& node, std::ostream& output);
-std::ostream& operator<<(std::ostream& stream, const Node& node);
 
 template <typename Value>
 void printValue(const Value& value, std::ostream& output)

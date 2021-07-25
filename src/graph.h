@@ -20,18 +20,6 @@ struct Edge
 };
 
 template <typename Weight>
-bool operator==(const Edge<Weight>& lhs, const Edge<Weight>& rhs)
-{
-    return lhs.from == rhs.from && lhs.to == rhs.to && lhs.weight == rhs.weight;
-}
-
-template <typename Weight>
-std::ostream& operator<<(std::ostream& stream, const Edge<Weight>& edge)
-{
-    return stream << "from: " << edge.from << " to: " << edge.to << " weight: " << edge.weight;
-}
-
-template <typename Weight>
 class DirectedWeightedGraph
 {
 private:

@@ -8,7 +8,6 @@
 
 namespace Graph
 {
-
 template <typename Weight>
 class Router
 {

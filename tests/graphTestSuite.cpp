@@ -4,6 +4,21 @@
 
 using namespace std;
 
+namespace
+{
+template <typename Weight>
+bool operator==(const Graph::Edge<Weight>& lhs, const Graph::Edge<Weight>& rhs)
+{
+    return lhs.from == rhs.from && lhs.to == rhs.to && lhs.weight == rhs.weight;
+}
+
+template <typename Weight>
+ostream& operator<<(ostream& stream, const Graph::Edge<Weight>& edge)
+{
+    return stream << "from: " << edge.from << " to: " << edge.to << " weight: " << edge.weight;
+}
+}
+
 namespace Graph
 {
 namespace Tests

@@ -21,37 +21,6 @@ Stop Stop::parseFrom(const Json::Map& attrs)
     return stop;
 }
 
-bool operator==(const Stop& lhs, const Stop& rhs)
-{
-    if (lhs.distances.size() != rhs.distances.size())
-    {
-        return false;
-    }
-
-    for (size_t i = 0; i < lhs.distances.size(); i++)
-    {
-        if (lhs.distances[i].destination != rhs.distances[i].destination ||
-            lhs.distances[i].length != rhs.distances[i].length)
-        {
-            return false;
-        }
-    }
-
-    return lhs.name == rhs.name && lhs.position.latitude == rhs.position.latitude &&
-           lhs.position.longitude == rhs.position.longitude;
-}
-
-std::ostream& operator<<(std::ostream& os, const Stop& stop)
-{
-    os << "stopName: " << stop.name << " distances: { ";
-    for (const auto& distance : stop.distances)
-    {
-        os << distance.destination << ": " << distance.length << ' ';
-    }
-    os << "} latitude: " << stop.position.latitude << " longitude: " << stop.position.longitude;
-    return os;
-}
-
 vector<string> parseStops(const Json::Array& stopNodes, bool isRoundtrip)
 {
     vector<string> stops;
@@ -89,32 +58,6 @@ Bus Bus::parseFrom(const Json::Map& attrs)
         }
     }
     return result;
-}
-
-bool operator==(const Bus& lhs, const Bus& rhs)
-{
-    if (lhs.stops.size() != rhs.stops.size())
-    {
-        return false;
-    }
-    for (size_t i = 0; i < lhs.stops.size(); i++)
-    {
-        if (lhs.stops[i] != rhs.stops[i])
-        {
-            return false;
-        }
-    }
-    return lhs.name == rhs.name;
-}
-
-std::ostream& operator<<(std::ostream& os, const Bus& bus)
-{
-    os << "busName: " << bus.name << " stops: {";
-    for (const auto& stopName : bus.stops)
-    {
-        os << stopName << ' ';
-    }
-    return os << " }";
 }
 
 ParsedRequests parseRequests(const Json::Array& nodes)

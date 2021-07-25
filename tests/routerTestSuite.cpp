@@ -27,6 +27,19 @@ void assertEdgesInRouteAreEqualTo(const Router<Weight>& router,
 }
 constexpr auto EmptyRouteInfo = optional<RouteInfo>();
 
+bool operator==(const typename Router<double>::RouteInfo& lhs, const typename Router<double>::RouteInfo& rhs)
+{
+    return lhs.id == rhs.id && fuzzyCompare(lhs.weight, rhs.weight) && lhs.edgeCount == rhs.edgeCount;
+}
+
+ostream& operator<<(ostream& stream, const optional<typename Router<double>::RouteInfo>& routeInfoOpt)
+{
+    if (!routeInfoOpt)
+    {
+        return stream << "route not found";
+    }
+    return stream << "id " << routeInfoOpt->id << " weight " << routeInfoOpt->weight << " edgeCount " << routeInfoOpt->edgeCount;
+}
 } // namespace
 
 void testBuildNonExistingRoute()

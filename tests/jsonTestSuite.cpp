@@ -6,6 +6,52 @@ using namespace std;
 
 namespace
 {
+bool operator==(const Json::Node& lhs, const Json::Node& rhs)
+{
+    return lhs.getBase() == rhs.getBase();
+}
+
+ostream& operator<<(ostream& stream, const Json::Node& node)
+{
+    printNode(node, stream);
+    return stream;
+}
+
+bool operator==(const Json::Map& lhs, const Json::Map& rhs)
+{
+    if (lhs.size() != rhs.size())
+    {
+        return false;
+    }
+
+    auto lhsIt = lhs.begin();
+    auto rhsIt = rhs.begin();
+    for (; lhsIt != lhs.end() && rhsIt != rhs.end(); lhsIt = next(lhsIt), rhsIt = next(rhsIt))
+    {
+        if (*lhsIt != *rhsIt)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool operator==(const Json::Array& lhs, const Json::Array& rhs)
+{
+    if (lhs.size() != rhs.size())
+    {
+        return false;
+    }
+    for (size_t i = 0; i < lhs.size(); i++)
+    {
+        if (!(lhs[i] == rhs[i]))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 void assertIsNotAllTypesExcept(const Json::Node& node,
                                const string& exceptedType,
                                const string& anotherExceptedType = "")

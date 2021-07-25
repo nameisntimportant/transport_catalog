@@ -10,7 +10,6 @@
 
 namespace BaseRequests
 {
-
 struct Distance
 {
     std::string destination;
@@ -25,8 +24,6 @@ struct Stop
 
     static Stop parseFrom(const Json::Map& attrs);
 };
-bool operator==(const Stop& lhs, const Stop& rhs);
-std::ostream& operator<<(std::ostream& os, const Stop& stop);
 
 struct Bus
 {
@@ -35,8 +32,6 @@ struct Bus
 
     static Bus parseFrom(const Json::Map& attrs);
 };
-bool operator==(const Bus& lhs, const Bus& rhs);
-std::ostream& operator<<(std::ostream& os, const Bus& bus);
 
 using ParsedStops = std::vector<Stop>;
 using ParsedBuses = std::vector<Bus>;

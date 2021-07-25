@@ -12,6 +12,41 @@ namespace
 const auto EmptyRouteOptional = optional<RouteStats>();
 }
 
+bool operator==(const TransportRouter::RouteElement& lhs, const TransportRouter::RouteElement& rhs)
+{
+    return lhs.waitTime == rhs.waitTime && lhs.bus == rhs.bus && lhs.from == rhs.from &&
+           lhs.spanCount == rhs.spanCount && fuzzyCompare(lhs.transitTime, rhs.transitTime);
+}
+
+bool operator==(const TransportRouter::RouteStats& lhs, const TransportRouter::RouteStats& rhs)
+{
+    if (lhs.routeElements.size() != rhs.routeElements.size())
+    {
+        return false;
+    }
+    for (size_t i = 0; i < lhs.routeElements.size(); i++)
+    {
+        if (!(lhs.routeElements[i] == rhs.routeElements[i]))
+        {
+            return false;
+        }
+    }
+    return fuzzyCompare(lhs.totalTime, rhs.totalTime);
+}
+
+ostream& operator<<(ostream& stream, const TransportRouter::RouteStats& stats)
+{
+    stream << "total time " << stats.totalTime;
+    stream << " route elements { ";
+    for (const auto& element : stats.routeElements)
+    {
+        stream << "wait time " << element.waitTime << " bus " << element.bus << " from "
+               << element.from << " span count " << element.spanCount << " transit time "
+               << element.transitTime << ". ";
+    }
+    return stream << "}";
+}
+
 // TODO: split into two functions
 namespace Tests
 {

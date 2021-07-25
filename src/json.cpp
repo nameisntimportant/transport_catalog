@@ -5,6 +5,7 @@ using namespace std;
 
 namespace Json
 {
+
 Node loadArray(istream& input)
 {
     vector<Node> result;
@@ -126,46 +127,6 @@ JsonTree load(istream& input)
     return JsonTree{loadNode(input)};
 }
 
-bool operator==(const Map& lhs, const Map& rhs)
-{
-    if (lhs.size() != rhs.size())
-    {
-        return false;
-    }
-
-    auto lhsIt = lhs.begin();
-    auto rhsIt = rhs.begin();
-    for (; lhsIt != lhs.end() && rhsIt != rhs.end(); lhsIt = next(lhsIt), rhsIt = next(rhsIt))
-    {
-        if (*lhsIt != *rhsIt)
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool operator==(const Array& lhs, const Array& rhs)
-{
-    if (lhs.size() != rhs.size())
-    {
-        return false;
-    }
-    for (size_t i = 0; i < lhs.size(); i++)
-    {
-        if (!(lhs[i] == rhs[i]))
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool operator==(const Node& lhs, const Node& rhs)
-{
-    return lhs.getBase() == rhs.getBase();
-}
-
 void printValue(const string& value, ostream& output)
 {
     output << '"';
@@ -229,9 +190,4 @@ void print(const JsonTree& tree, ostream& output)
     printNode(tree.getRoot(), output);
 }
 
-std::ostream& operator<<(std::ostream& stream, const Node& node)
-{
-    printNode(node, stream);
-    return stream;
-}
 } // namespace Json

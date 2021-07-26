@@ -2,7 +2,6 @@
 
 #include "utils.h"
 #include "graph.h"
-#include "profiler.h"
 
 #include <algorithm>
 
@@ -62,8 +61,6 @@ Router<Weight>::Router(const Graph& graph)
     , routesInternalData_(graph.getVertexCount(),
                           std::vector<std::optional<RouteInternalData>>(graph.getVertexCount()))
 {
-    LOG_DURATION("Router ctor");
-
     initializeRoutesInternalData();
 
     const size_t vertexCount = graph.getVertexCount();

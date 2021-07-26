@@ -5,7 +5,6 @@ using namespace std;
 
 namespace
 {
-
 constexpr double FromKmPerHourToMPerMinute = 1000.0 / 60.0;
 }
 
@@ -13,7 +12,6 @@ TransportRouter::TransportRouter(const BaseRequests::ParsedBuses& buses,
                                  const RouteDistancesMap& routeDistances,
                                  const Json::Map& routingSettingsMap)
 {
-    LOG_DURATION("TransportRouter ctor");
     createGraph(buses);
     fillGraphWithEdges(buses, routeDistances, makeRoutingSettings(routingSettingsMap));
     router_ = make_unique<Router>(*graph_);
@@ -82,8 +80,6 @@ TransportRouter::RoutingSettings TransportRouter::makeRoutingSettings(
 optional<TransportRouter::RouteStats> TransportRouter::findRoute(const string& from,
                                                                  const string& to) const
 {
-    LOG_DURATION("finding route");
-
     if (from == to)
     {
         return RouteStats{};

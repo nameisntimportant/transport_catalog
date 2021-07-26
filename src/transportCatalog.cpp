@@ -5,7 +5,6 @@ using namespace std;
 
 TransportCatalog::TransportCatalog(const BaseRequests::ParsedRequests& data, const Json::Map& routingSettings)
 {
-    LOG_DURATION("TransportCatalog ctor");
     for (const auto& stop : data.stops)
     {
         stops_.insert({stop.name, {}});

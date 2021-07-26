@@ -8,24 +8,6 @@
 
 using namespace std;
 
-ifstream openFileAsInputStream(const string& fileName, ios_base::openmode mode = ios::in)
-{
-    ifstream fileStream(fileName, mode);
-    ASSERT_WITH_MESSAGE(fileStream, ("can't open the file - it doesn't exist:" + fileName));
-    return fileStream;
-}
-
-string readWholeFile(const string& fileName)
-{
-    ifstream fileStream = openFileAsInputStream(fileName, ios::ate);
-    const ifstream::pos_type endPos = fileStream.tellg();
-    fileStream.seekg(0, ios::beg);
-
-    string data(endPos, '\0');
-    fileStream.read(&data[0], endPos);
-    return data;
-}
-
 int main(int argc, const char* argv[])
 {
     const auto baseRequestsJsonTree = Json::load(cin);

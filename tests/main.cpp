@@ -5,7 +5,7 @@
 #include "sphereTestSuite.h"
 #include "transportRouterTestSuite.h"
 
-int main(int argc, const char* argv[])
+int main()
 {
     Json::Tests::run();
     BaseRequests::Tests::run();

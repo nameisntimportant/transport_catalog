@@ -3,7 +3,8 @@
 
 using namespace std;
 
-TransportCatalog::TransportCatalog(const BaseRequests::ParsedRequests& data, const Json::Map& routingSettings)
+TransportCatalog::TransportCatalog(const BaseRequests::ParsedRequests& data,
+                                   const Json::Map& routingSettings)
 {
     for (const auto& stop : data.stops)
     {
@@ -14,11 +15,11 @@ TransportCatalog::TransportCatalog(const BaseRequests::ParsedRequests& data, con
     const auto routeDistances = getRouteDistances(data.stops);
     for (const auto& bus : data.buses)
     {
-        buses_[bus.name] =
-            Bus{bus.stops.size(),
-                           calculateUniqueItemsCount(asRange(bus.stops)),
-                           calculateRoadRouteLength(bus.stops, routeDistances),
-                           calculateOrthodromicRouteLength(bus.stops, stopsCoordinates)};
+        buses_[bus.name] = Bus{
+            .stopCount = bus.stops.size(),
+            .uniqueStopCount = calculateUniqueItemsCount(asRange(bus.stops)),
+            .roadRouteLength = calculateRoadRouteLength(bus.stops, routeDistances),
+            .orthodromicRouteLength = calculateOrthodromicRouteLength(bus.stops, stopsCoordinates)};
 
         for (const string& stopName : bus.stops)
         {

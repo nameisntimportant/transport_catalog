@@ -11,7 +11,7 @@ set(UTILS_DIRECTORY ${SRC_DIRECTORY}/utils)
 
 include_directories(${UTILS_DIRECTORY})
 
-set (PROJECT_SRCS
+set(PROJECT_SRCS
     ${SRC_DIRECTORY}/main.cpp
     ${SRC_DIRECTORY}/json.cpp
     ${SRC_DIRECTORY}/baseRequests.cpp
@@ -21,7 +21,7 @@ set (PROJECT_SRCS
     ${SRC_DIRECTORY}/transportRouter.cpp
     ${UTILS_DIRECTORY}/utils.cpp)
 
-set (PROJECT_HDRS
+set(PROJECT_HDRS
     ${SRC_DIRECTORY}/json.h
     ${SRC_DIRECTORY}/baseRequests.h
     ${SRC_DIRECTORY}/transportCatalog.h
@@ -77,4 +77,5 @@ set (UNDER_TEST_HDRS
 
 add_executable(${TESTS_PROJECT} ${TESTS_PROJECT_SRCS} ${TESTS_PROJECT_HDRS}
                ${UNDER_TEST_SRCS} ${UNDER_TEST_HDRS})
+
 target_include_directories(${TESTS_PROJECT} PRIVATE ${SRC_DIRECTORY})

@@ -1,7 +1,7 @@
 set(CMAKE_MIN_VERSION 3.5)
 cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
 
-project(transport_guide LANGUAGES CXX)
+project(transport_catalog LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

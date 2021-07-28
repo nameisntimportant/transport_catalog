@@ -87,3 +87,19 @@ add_executable(${TESTS_PROJECT} ${TESTS_PROJECT_SRCS} ${TESTS_PROJECT_HDRS}
                ${UNDER_TEST_SRCS} ${UNDER_TEST_HDRS})
 
 target_include_directories(${TESTS_PROJECT} PRIVATE ${SRC_DIRECTORY})
+
+option(RUN_UNIT_TESTS_AUTOMATICALLY "Automatically run unit tests after building transport catalog" OFF)
+if(RUN_UNIT_TESTS_AUTOMATICALLY)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${TESTS_PROJECT})
+endif()
+
+set (INTEGRATION_TEST_PATH ${CMAKE_SOURCE_DIR}/integrationTest)
+set (INTEGRATION_TEST_SCRIPT ${INTEGRATION_TEST_PATH}/integrationTest.py)
+set (PATH_TO_BINARY_UNDER_TEST ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME})
+
+option(RUN_INTEGRATION_TESTS_AUTOMATICALLY "Automatically run integration tests after building transport catalog" OFF)
+if(RUN_INTEGRATION_TESTS_AUTOMATICALLY)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                       COMMAND ${INTEGRATION_TEST_SCRIPT} ${PATH_TO_BINARY_UNDER_TEST}
+                       WORKING_DIRECTORY ${INTEGRATION_TEST_PATH})
+endif()

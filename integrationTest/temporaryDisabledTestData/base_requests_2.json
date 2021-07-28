@@ -1,4 +1,7 @@
 {
+  "serialization_settings": {
+    "file": "/tmp/transportcatalogdfs31235gsad324sct422/tmpbjkwuvca9"
+  },
   "routing_settings": {
     "bus_velocity": 280,
     "bus_wait_time": 490

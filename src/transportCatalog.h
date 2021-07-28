@@ -42,7 +42,12 @@ public:
     const Bus* getBus(const std::string& name) const;
     Route findRoute(const std::string& from, const std::string& to) const;
 
+    std::string serialize() const;
+    static TransportCatalog deserialize(const std::string& data);
+
 private:
+    TransportCatalog() = default;
+
     static PointsMap getStopCoordinates(const BaseRequests::ParsedStops& stops);
     static RouteDistancesMap getRouteDistances(const BaseRequests::ParsedStops& stops);
 

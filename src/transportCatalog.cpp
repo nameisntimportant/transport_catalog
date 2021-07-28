@@ -1,6 +1,8 @@
 #include "transportCatalog.h"
 #include "utils.h"
 
+#include "transport_catalog.pb.h"
+
 using namespace std;
 
 TransportCatalog::TransportCatalog(const BaseRequests::ParsedRequests& data,
@@ -55,6 +57,65 @@ TransportCatalog::PointsMap TransportCatalog::getStopCoordinates(
                        Sphere::Point{stopInput.position.latitude, stopInput.position.longitude});
     }
     return result;
+}
+
+string TransportCatalog::serialize() const
+{
+    TCProto::TransportCatalog databaseProto;
+
+    for (const auto& [name, stop] : stops_)
+    {
+        TCProto::Stop& stopProto = *databaseProto.add_stops();
+        stopProto.set_name(name);
+        for (const string& busName : stop.busNames)
+        {
+            stopProto.add_bus_names(busName);
+        }
+    }
+
+    for (const auto& [name, bus] : buses_)
+    {
+        TCProto::Bus& bus_proto = *databaseProto.add_buses();
+        bus_proto.set_name(name);
+        bus_proto.set_stop_count(bus.stopCount);
+        bus_proto.set_unique_stop_count(bus.uniqueStopCount);
+        bus_proto.set_road_route_length(bus.roadRouteLength);
+        bus_proto.set_orthodromic_route_length(bus.orthodromicRouteLength);
+    }
+
+    // TODO: implement router serialization
+
+    return databaseProto.SerializeAsString();
+}
+
+TransportCatalog TransportCatalog::deserialize(const string& data)
+{
+    TCProto::TransportCatalog proto;
+    assert(proto.ParseFromString(data));
+
+    TransportCatalog catalog;
+
+    for (const TCProto::Stop& stopProto : proto.stops())
+    {
+        Stop& stop = catalog.stops_[stopProto.name()];
+        for (const string& busName : stopProto.bus_names())
+        {
+            stop.busNames.insert(busName);
+        }
+    }
+
+    for (const TCProto::Bus& busProto : proto.buses())
+    {
+        Bus& bus = catalog.buses_[busProto.name()];
+        bus.stopCount = busProto.stop_count();
+        bus.uniqueStopCount = busProto.unique_stop_count();
+        bus.roadRouteLength = busProto.road_route_length();
+        bus.orthodromicRouteLength = busProto.orthodromic_route_length();
+    }
+
+    // TODO: implement router deserialization
+
+    return catalog;
 }
 
 RouteDistancesMap TransportCatalog::getRouteDistances(const BaseRequests::ParsedStops& stops)

@@ -17,7 +17,7 @@ from shutil import rmtree
 # in testData/make_base_* and testData/process_requests_* files too.
 PROTOBUF_BIN_FILES_PATH = '/tmp/transportcatalogdfs31235gsad324sct422/'
 
-ACTUAL_OUTPUT_PATH = 'actualOutput/'
+ACTUAL_OUTPUT_PATH = 'actual_output/'
 
 MAKE_BASE_PARAM = 'make_base'
 PROCESS_REQUESTS_PARAM = 'process_requests'
@@ -32,7 +32,7 @@ JSON_FILE_POSTFIX = '.json'
 MAKE_BASE_TIMEOUT = 3
 PROCESS_REQUESTS_TIMEOUT = 1.25
 
-TEST_DATA_PATH = 'testData/'
+TEST_DATA_PATH = 'test_data/'
 
 INTEGRATION_TEST_MESSAGE_PREFIX = "integration test: "
 

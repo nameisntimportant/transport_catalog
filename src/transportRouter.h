@@ -6,8 +6,7 @@
 #include "routeDistancesDict.h"
 #include "router.h"
 
-#include "makeVisitor.h"
-#include "profiler.h"
+#include "transport_router.pb.h"
 
 #include <memory>
 #include <unordered_map>

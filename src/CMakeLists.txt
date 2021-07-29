@@ -10,7 +10,6 @@ set(PROJECT_SRCS
     transportRouter.cpp
     ${UTILS_DIRECTORY}/utils.cpp)
 
-# remove makeVisitor.h since it unused
 set(PROJECT_HDRS
     json.h
     baseRequests.h
@@ -23,7 +22,6 @@ set(PROJECT_HDRS
     transportRouter.h
     ${UTILS_DIRECTORY}/utils.h
     ${UTILS_DIRECTORY}/log.h
-    ${UTILS_DIRECTORY}/makeVisitor.h
     ${UTILS_DIRECTORY}/profiler.h)
 
 set(PROTO_DIRECTORY proto)

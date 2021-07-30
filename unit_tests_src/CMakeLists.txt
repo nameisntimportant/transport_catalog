@@ -1,3 +1,5 @@
+set(TARGET ${UNIT_TESTS_PROJECT})
+
 set(UNIT_TESTS_PROJECT_SRCS
     main.cpp
     jsonTestSuite.cpp
@@ -35,4 +37,6 @@ set(UNDER_TEST_HDRS
 add_executable(${UNIT_TESTS_PROJECT} ${UNIT_TESTS_PROJECT_SRCS} ${UNIT_TESTS_PROJECT_HDRS}
                ${UNDER_TEST_SRCS} ${UNDER_TEST_HDRS})
 
-target_include_directories(${UNIT_TESTS_PROJECT} PRIVATE ${SRC_DIRECTORY} ${UTILS_DIRECTORY})
+target_include_directories(${TARGET} PRIVATE ${SRC_DIRECTORY} ${UTILS_DIRECTORY})
+
+target_link_libraries(${TARGET} PRIVATE proto_lib)

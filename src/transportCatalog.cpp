@@ -61,11 +61,11 @@ TransportCatalog::PointsMap TransportCatalog::getStopCoordinates(
 
 string TransportCatalog::serialize() const
 {
-    TCProto::TransportCatalog databaseProto;
+    TCProto::TransportCatalog proto;
 
     for (const auto& [name, stop] : stops_)
     {
-        TCProto::Stop& stopProto = *databaseProto.add_stops();
+        TCProto::Stop& stopProto = *proto.add_stops();
         stopProto.set_name(name);
         for (const string& busName : stop.busNames)
         {
@@ -75,17 +75,17 @@ string TransportCatalog::serialize() const
 
     for (const auto& [name, bus] : buses_)
     {
-        TCProto::Bus& bus_proto = *databaseProto.add_buses();
-        bus_proto.set_name(name);
-        bus_proto.set_stop_count(bus.stopCount);
-        bus_proto.set_unique_stop_count(bus.uniqueStopCount);
-        bus_proto.set_road_route_length(bus.roadRouteLength);
-        bus_proto.set_orthodromic_route_length(bus.orthodromicRouteLength);
+        TCProto::Bus& busProto = *proto.add_buses();
+        busProto.set_name(name);
+        busProto.set_stop_count(bus.stopCount);
+        busProto.set_unique_stop_count(bus.uniqueStopCount);
+        busProto.set_road_route_length(bus.roadRouteLength);
+        busProto.set_orthodromic_route_length(bus.orthodromicRouteLength);
     }
 
     router_->serialize(*proto.mutable_router());
 
-    return databaseProto.SerializeAsString();
+    return proto.SerializeAsString();
 }
 
 TransportCatalog TransportCatalog::deserialize(const string& data)

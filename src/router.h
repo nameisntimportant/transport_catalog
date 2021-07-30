@@ -1,7 +1,7 @@
 #pragma once
 
-#include "utils.h"
 #include "graph.h"
+#include "utils.h"
 
 #include "graph.pb.h"
 
@@ -88,7 +88,8 @@ void Router<Weight>::initializeRoutesInternalData()
         for (const EdgeId edgeId : graph_.getEdgesWhichStartFrom(vertex))
         {
             const auto& edge = graph_.getEdge(edgeId);
-            ASSERT_WITH_MESSAGE(edge.weight >= 0, "Router works only with edges with non-negative weight");
+            ASSERT_WITH_MESSAGE(edge.weight >= 0,
+                                "Router works only with edges with non-negative weight");
 
             auto& routeInternalData = routesInternalData_[vertex][edge.to];
             if (!routeInternalData || routeInternalData->weight > edge.weight)
@@ -109,8 +110,7 @@ void Router<Weight>::relaxRoute(VertexId vertexFrom,
     const Weight candidateWeight = routeFrom.weight + routeTo.weight;
     if (!routeRelaxing || candidateWeight < routeRelaxing->weight)
     {
-        routeRelaxing = {candidateWeight,
-                         routeTo.prevEdge ? routeTo.prevEdge : routeFrom.prevEdge};
+        routeRelaxing = {candidateWeight, routeTo.prevEdge ? routeTo.prevEdge : routeFrom.prevEdge};
     }
 }
 
@@ -172,18 +172,22 @@ void Router<Weight>::releaseRoute(RouteId routeId)
     expandedRoutesCache_.erase(routeId);
 }
 
-inline bool operator==(const typename Router<double>::RouteInfo& lhs, const typename Router<double>::RouteInfo& rhs)
+inline bool operator==(const typename Router<double>::RouteInfo& lhs,
+                       const typename Router<double>::RouteInfo& rhs)
 {
-    return lhs.id == rhs.id && fuzzyCompare(lhs.weight, rhs.weight) && lhs.edgeCount == rhs.edgeCount;
+    return lhs.id == rhs.id && fuzzyCompare(lhs.weight, rhs.weight) &&
+           lhs.edgeCount == rhs.edgeCount;
 }
 
-inline std::ostream& operator<<(std::ostream& stream, const std::optional<typename Router<double>::RouteInfo>& routeInfoOpt)
+inline std::ostream& operator<<(
+    std::ostream& stream, const std::optional<typename Router<double>::RouteInfo>& routeInfoOpt)
 {
     if (!routeInfoOpt)
     {
         return stream << "route not found";
     }
-    return stream << "id " << routeInfoOpt->id << " weight " << routeInfoOpt->weight << " edgeCount " << routeInfoOpt->edgeCount;
+    return stream << "id " << routeInfoOpt->id << " weight " << routeInfoOpt->weight
+                  << " edgeCount " << routeInfoOpt->edgeCount;
 }
 
 template <typename Weight>

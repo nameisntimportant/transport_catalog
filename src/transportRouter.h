@@ -68,6 +68,4 @@ private:
 
     std::unordered_map<std::string, Graph::VertexId> stopToVertex_;
     std::unordered_map<Graph::EdgeId, RouteElement> edgeToRouteElement_;
-
-    RoutingSettings routingSettings_;
 };

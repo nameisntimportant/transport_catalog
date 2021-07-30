@@ -87,7 +87,7 @@ def main():
         filesDiff = run(['diff', '-w', EXPECTED_OUTPUT_FILE_NAME, ACTUAL_OUTPUT_FILE_NAME], stdout=PIPE, text=True)
 
         if filesDiff.stdout:
-            fail(3, 'test data dir name: "' + testDataDir + '", actual output is different from expected. "' +
+            fail(3, 'test data dir name: "' + str(testDataDir) + '", actual output is different from expected. "' +
                  ACTUAL_OUTPUT_FILE_NAME + '" is not equal with "' + EXPECTED_OUTPUT_FILE_NAME + '":\n' + filesDiff.stdout)
         else:
             ok('test in dir ' + str(testDataDir))

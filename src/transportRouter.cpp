@@ -109,3 +109,58 @@ optional<TransportRouter::RouteStats> TransportRouter::findRoute(const string& f
 
     return result;
 }
+
+void TransportRouter::serialize(TCProto::TransportRouter& proto) const
+{
+    graph_->serialize(*proto.mutable_graph());
+    router_->serialize(*proto.mutable_router());
+
+    proto.mutable_vertexes_info()->Reserve(stopToVertex_.size());
+    for (const auto& [stopName, vertexId] : stopToVertex_)
+    {
+        auto& vertexInfoProto = *proto.add_vertexes_info();
+        vertexInfoProto.set_stop_name(stopName);
+        vertexInfoProto.set_vertex_id(vertexId);
+    }
+
+    proto.mutable_edges_info()->Reserve(edgeToRouteElement_.size());
+    for (const auto& [edgeId, routeElement] : edgeToRouteElement_)
+    {
+        auto& edgeInfoProto = *proto.add_edges_info();
+        edgeInfoProto.set_edge_id(edgeId);
+        edgeInfoProto.set_wait_time(routeElement.waitTime);
+        edgeInfoProto.set_bus_name(routeElement.bus);
+        edgeInfoProto.set_departure_stop_name(routeElement.from);
+        edgeInfoProto.set_span_count(routeElement.spanCount);
+        edgeInfoProto.set_transit_time(routeElement.transitTime);
+    }
+}
+
+unique_ptr<TransportRouter> TransportRouter::deserialize(const TCProto::TransportRouter& proto)
+{
+    unique_ptr<TransportRouter> transportRouterPtr(
+        new TransportRouter); // Ctor is private, so can't use make_unique
+
+    transportRouterPtr->graph_ = make_unique<RoutesGraph>(RoutesGraph::deserialize(proto.graph()));
+    transportRouterPtr->router_ = Router::deserialize(proto.router(), *transportRouterPtr->graph_);
+
+    transportRouterPtr->stopToVertex_.reserve(proto.vertexes_info().size());
+    for (const auto& vertexInfoProto : proto.vertexes_info())
+    {
+        transportRouterPtr->stopToVertex_[vertexInfoProto.stop_name()] =
+            vertexInfoProto.vertex_id();
+    }
+
+    transportRouterPtr->edgeToRouteElement_.reserve(proto.edges_info().size());
+    for (const auto& edgeInfoProto : proto.edges_info())
+    {
+        transportRouterPtr->edgeToRouteElement_[edgeInfoProto.edge_id()] = {
+            .waitTime = edgeInfoProto.wait_time(),
+            .bus = edgeInfoProto.bus_name(),
+            .from = edgeInfoProto.departure_stop_name(),
+            .spanCount = edgeInfoProto.span_count(),
+            .transitTime = edgeInfoProto.transit_time()};
+    }
+
+    return transportRouterPtr;
+}

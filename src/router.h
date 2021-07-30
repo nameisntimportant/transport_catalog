@@ -3,6 +3,8 @@
 #include "utils.h"
 #include "graph.h"
 
+#include "graph.pb.h"
+
 #include <algorithm>
 
 namespace Graph
@@ -19,7 +21,8 @@ private:
         Weight weight;
         std::optional<EdgeId> prevEdge;
     };
-    using RoutesInternalData = std::vector<std::vector<std::optional<RouteInternalData>>>;
+    using RouteInternalDataForOneVertex = std::vector<std::optional<RouteInternalData>>;
+    using RoutesInternalData = std::vector<RouteInternalDataForOneVertex>;
 
 public:
     using RouteId = uint64_t;
@@ -33,11 +36,16 @@ public:
 
     Router(const Graph& graph);
 
+    void serialize(GraphProto::Router& proto);
+    static std::unique_ptr<Router> deserialize(const GraphProto::Router& proto, const Graph& graph);
+
     std::optional<RouteInfo> buildRoute(VertexId from, VertexId to) const;
     EdgeId getRouteEdge(RouteId routeId, size_t edgeIndex) const;
     void releaseRoute(RouteId routeId);
 
 private:
+    Router(const Graph& graph, const GraphProto::Router& proto);
+
     void initializeRoutesInternalData();
 
     void relaxRoute(VertexId vertexFrom,
@@ -59,7 +67,7 @@ template <typename Weight>
 Router<Weight>::Router(const Graph& graph)
     : graph_(graph)
     , routesInternalData_(graph.getVertexCount(),
-                          std::vector<std::optional<RouteInternalData>>(graph.getVertexCount()))
+                          RouteInternalDataForOneVertex(graph.getVertexCount()))
 {
     initializeRoutesInternalData();
 
@@ -176,6 +184,70 @@ inline std::ostream& operator<<(std::ostream& stream, const std::optional<typena
         return stream << "route not found";
     }
     return stream << "id " << routeInfoOpt->id << " weight " << routeInfoOpt->weight << " edgeCount " << routeInfoOpt->edgeCount;
+}
+
+template <typename Weight>
+void Router<Weight>::serialize(GraphProto::Router& proto)
+{
+    static_assert(std::is_same_v<Weight, double>,
+                  "Serialization is implemented only for double weights");
+
+    for (const auto& routesDataForOneVertex : routesInternalData_)
+    {
+        auto& routesDataForOneVertexProto = *proto.add_routes_data();
+        for (const auto& routeData : routesDataForOneVertex)
+        {
+            auto& routeDataProto = *routesDataForOneVertexProto.add_routes_data_for_one_vertex();
+            if (routeData)
+            {
+                routeDataProto.set_exists(true);
+                routeDataProto.set_weight(routeData->weight);
+                if (routeData->prevEdge)
+                {
+                    routeDataProto.set_has_prev_edge(true);
+                    routeDataProto.set_prev_edge(*routeData->prevEdge);
+                }
+            }
+        }
+    }
+}
+
+template <typename Weight>
+Router<Weight>::Router(const Graph& graph, const GraphProto::Router& proto)
+    : graph_(graph)
+{
+    static_assert(std::is_same_v<Weight, double>,
+                  "Serialization is implemented only for double weights");
+
+    routesInternalData_.reserve(proto.routes_data_size());
+    for (const auto& routesDataForOneVertexProto : proto.routes_data())
+    {
+        auto& routesDataForOneVertex = routesInternalData_.emplace_back();
+        routesDataForOneVertex.reserve(routesDataForOneVertexProto.routes_data_for_one_vertex_size());
+        for (const auto& routeDataForOneVertexProto : routesDataForOneVertexProto.routes_data_for_one_vertex())
+        {
+            auto& routeData = routesDataForOneVertex.emplace_back();
+            if (routeDataForOneVertexProto.exists())
+            {
+                routeData = RouteInternalData{routeDataForOneVertexProto.weight(), std::nullopt};
+                if (routeDataForOneVertexProto.has_prev_edge())
+                {
+                    routeData->prevEdge = routeDataForOneVertexProto.prev_edge();
+                }
+            }
+        }
+    }
+}
+
+template <typename Weight>
+std::unique_ptr<Router<Weight>> Router<Weight>::deserialize(const GraphProto::Router& proto,
+                                                            const Graph& graph)
+{
+    // We can't define Router(Graph&) in the private section, by analogy with TransportRouter(),
+    // since we already got it in the public section. So we implement Router(Graph&,
+    // GraphProto::Router&) and parse proto file in Ctor instead of this method
+    return std::unique_ptr<Router>(
+        new Router(graph, proto)); // Ctor is private, so can't use make_unique
 }
 
 } // namespace Graph

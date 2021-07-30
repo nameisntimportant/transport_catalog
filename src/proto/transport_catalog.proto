@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "transport_router.proto";
+
 package TCProto;
 
 message Stop {
@@ -18,5 +20,5 @@ message Bus {
 message TransportCatalog {
     repeated Stop stops = 1;
     repeated Bus buses = 2;
-
+    TransportRouter router = 3;
 };

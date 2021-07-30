@@ -49,7 +49,12 @@ public:
 
     std::optional<RouteStats> findRoute(const std::string& from, const std::string& to) const;
 
+    void serialize(TCProto::TransportRouter& proto) const;
+    static std::unique_ptr<TransportRouter> deserialize(const TCProto::TransportRouter& proto);
+
 private:
+    TransportRouter() = default;
+
     void createGraph(const BaseRequests::ParsedBuses& buses);
     void fillGraphWithEdges(const BaseRequests::ParsedBuses& buses,
                             const RouteDistancesMap& routeDistances,

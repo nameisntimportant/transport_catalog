@@ -83,7 +83,7 @@ string TransportCatalog::serialize() const
         bus_proto.set_orthodromic_route_length(bus.orthodromicRouteLength);
     }
 
-    // TODO: implement router serialization
+    router_->serialize(*proto.mutable_router());
 
     return databaseProto.SerializeAsString();
 }
@@ -113,7 +113,7 @@ TransportCatalog TransportCatalog::deserialize(const string& data)
         bus.orthodromicRouteLength = busProto.orthodromic_route_length();
     }
 
-    // TODO: implement router deserialization
+    catalog.router_ = TransportRouter::deserialize(proto.router());
 
     return catalog;
 }

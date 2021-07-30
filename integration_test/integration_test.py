@@ -8,10 +8,11 @@
 # 3. Compares output from 2-nd step with expected, wich is stored in expected_[TEST_NAME] file.
 
 from sys import exit, argv
-from os import listdir, mkdir, path
+from os import listdir, mkdir, path, chdir
 from subprocess import check_output, PIPE, CalledProcessError, run, STDOUT
 from colorama import Fore, Style
 from shutil import rmtree
+from pathlib import Path
 
 # Please, notice that if you want to change PROTOBUF_BIN_FILES_PATH, you should change it
 # in testData/make_base_* and testData/process_requests_* files too.
@@ -22,12 +23,10 @@ ACTUAL_OUTPUT_PATH = 'actual_output/'
 MAKE_BASE_PARAM = 'make_base'
 PROCESS_REQUESTS_PARAM = 'process_requests'
 
-BASE_REQUESTS_FILE_PREFIX = 'base_requests_'
-STAT_REQUESTS_FILE_PREFIX = 'stat_requests_'
-EXPECTED_OUTPUT_FILE_PREFIX = 'expected_'
-ACTUAL_OUTPUT_FILE_PREFIX = 'actual_'
-
-JSON_FILE_POSTFIX = '.json'
+BASE_REQUESTS_FILE_NAME = 'base_requests.json'
+STAT_REQUESTS_FILE_NAME = 'stat_requests.json'
+EXPECTED_OUTPUT_FILE_NAME = 'expected.json'
+ACTUAL_OUTPUT_FILE_NAME = 'actual.json'
 
 MAKE_BASE_TIMEOUT = 3
 PROCESS_REQUESTS_TIMEOUT = 1.25
@@ -58,53 +57,41 @@ def ensurePathExistsAndIsEmpty(myPath):
 
 def main():
     print("starting integration test")
-	
+
     if (len(argv) != 2):
         fail(1, 'please pass path to transport_catalog binary file as a single parametr')
     transportCatalogBin = argv[1]
 
+    absoluteTestDataPath = Path(TEST_DATA_PATH).absolute()
+    testDataDirs = [x for x in absoluteTestDataPath.iterdir() if x.is_dir()]
+    if (len(testDataDirs) == 0):
+        fail(4, 'no test data dirs were found in' + absoluteTestDataPath)
+
     ensurePathExistsAndIsEmpty(PROTOBUF_BIN_FILES_PATH)
     ensurePathExistsAndIsEmpty(ACTUAL_OUTPUT_PATH)
 
-    gotAtLeastOneTest = False
+    for testDataDir in testDataDirs:
+        chdir(testDataDir)
 
-    testInputFileNames = listdir(TEST_DATA_PATH)
-    for makeBaseFileName in testInputFileNames:
-        if not makeBaseFileName.startswith(BASE_REQUESTS_FILE_PREFIX):
-            continue
-
-        gotAtLeastOneTest = True
-
-        testCaseName = makeBaseFileName[len(BASE_REQUESTS_FILE_PREFIX): len(makeBaseFileName) - len(JSON_FILE_POSTFIX)]
-
-        makeBaseInputFile = open(TEST_DATA_PATH + makeBaseFileName, 'r')
+        makeBaseInputFile = open(BASE_REQUESTS_FILE_NAME, 'r')
         runBin(transportCatalogBin, MAKE_BASE_PARAM, makeBaseInputFile, MAKE_BASE_TIMEOUT)
 
-        processRequestsInputFile = open(TEST_DATA_PATH + STAT_REQUESTS_FILE_PREFIX + testCaseName +
-                                        JSON_FILE_POSTFIX, 'r')
-        actualOutput = runBin(transportCatalogBin, PROCESS_REQUESTS_PARAM,
-                              processRequestsInputFile, PROCESS_REQUESTS_TIMEOUT)
+        processRequestsInputFile = open(STAT_REQUESTS_FILE_NAME, 'r')
+        actualOutput = runBin(transportCatalogBin, PROCESS_REQUESTS_PARAM, processRequestsInputFile,
+                              PROCESS_REQUESTS_TIMEOUT)
 
-        actualOutputFile = open(ACTUAL_OUTPUT_PATH + ACTUAL_OUTPUT_FILE_PREFIX + testCaseName + JSON_FILE_POSTFIX, 'w')
+        actualOutputFile = open(ACTUAL_OUTPUT_FILE_NAME, 'w')
         actualOutputFile.write(actualOutput)
         actualOutputFile.close()
 
-        expectedOutputFileName = TEST_DATA_PATH + EXPECTED_OUTPUT_FILE_PREFIX + testCaseName + JSON_FILE_POSTFIX
-
-        filesDiff = run(['diff', '-w', expectedOutputFileName, actualOutputFile.name], stdout=PIPE, text=True)
+        filesDiff = run(['diff', '-w', EXPECTED_OUTPUT_FILE_NAME, ACTUAL_OUTPUT_FILE_NAME], stdout=PIPE, text=True)
 
         if filesDiff.stdout:
-            fail(3, 'test key name: "' + testCaseName + '", actual output is different from expected. "' +
-                 actualOutputFile.name + '" is not equal with "' + expectedOutputFileName + '":\n' +
-                 filesDiff.stdout)
+            fail(3, 'test data dir name: "' + testDataDir + '", actual output is different from expected. "' +
+                 ACTUAL_OUTPUT_FILE_NAME + '" is not equal with "' + EXPECTED_OUTPUT_FILE_NAME + '":\n' + filesDiff.stdout)
         else:
-            ok('test key ' + testCaseName)
-
-    if not gotAtLeastOneTest:
-        fail(4, 'no testData was found in' + path.abspath(TEST_DATA_PATH))
-    else:
-        ok('all tests')
-
+            ok('test in dir ' + str(testDataDir))
+    ok('all tests')
     rmtree(PROTOBUF_BIN_FILES_PATH)
     return 0
 

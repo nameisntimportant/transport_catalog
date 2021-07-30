@@ -1,5 +1,4 @@
 #include "transportRouter.h"
-#include "log.h"
 
 using namespace std;
 

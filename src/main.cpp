@@ -15,6 +15,7 @@ constexpr auto WrongParametrsMsg("Usage: transport_catalog [make_base|process_re
 string readFileData(const string& fileName)
 {
     ifstream file(fileName, ios::binary | ios::ate);
+    ASSERT_WITH_MESSAGE(file, "can't read open the file " + fileName);
     const ifstream::pos_type endPos = file.tellg();
     file.seekg(0, ios::beg);
 

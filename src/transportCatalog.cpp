@@ -42,7 +42,7 @@ const Responses::Bus* TransportCatalog::getBus(const string& name) const
     return getValuePointer(buses_, name);
 }
 
-Responses::Route TransportCatalog::findRoute(const std::string& from, const std::string& to) const
+Responses::Route TransportCatalog::findRoute(const string& from, const string& to) const
 {
     return router_->findRoute(from, to);
 }

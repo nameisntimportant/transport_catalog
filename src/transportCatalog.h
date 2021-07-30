@@ -5,7 +5,6 @@
 #include "sphere.h"
 #include "transportRouter.h"
 
-#include <set>
 #include <string>
 #include <unordered_map>
 

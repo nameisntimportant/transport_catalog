@@ -141,12 +141,12 @@ void printValue(const string& value, ostream& output)
     output << '"';
 }
 
-void printValue(const bool& value, std::ostream& output)
+void printValue(const bool& value, ostream& output)
 {
     output << std::boolalpha << value;
 }
 
-void printValue(const Array& nodes, std::ostream& output)
+void printValue(const Array& nodes, ostream& output)
 {
     output << '[';
     bool first = true;
@@ -162,7 +162,7 @@ void printValue(const Array& nodes, std::ostream& output)
     output << ']';
 }
 
-void printValue(const Map& map, std::ostream& output)
+void printValue(const Map& map, ostream& output)
 {
     output << '{';
     bool first = true;

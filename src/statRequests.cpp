@@ -82,7 +82,7 @@ Json::Map Route::process(const TransportCatalog& database) const
         auto waitElement = Json::Map{{"type", Json::Node("Wait"s)},
                                      {"stop_name", Json::Node(element.from)},
                                      {"time", Json::Node(element.waitTime)}};
-        items.push_back(std::move(waitElement));
+        items.push_back(move(waitElement));
 
         auto busElement =
             Json::Map{{"type", Json::Node("Bus"s)},
@@ -90,7 +90,7 @@ Json::Map Route::process(const TransportCatalog& database) const
                       {"time", Json::Node(element.transitTime)},
                       {"span_count", Json::Node(static_cast<int>(element.spanCount))}};
 
-        items.push_back(std::move(busElement));
+        items.push_back(move(busElement));
     }
 
     dict["items"] = move(items);

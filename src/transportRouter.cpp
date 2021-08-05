@@ -42,7 +42,7 @@ void TransportRouter::fillGraphWithEdges(const BaseRequests::ParsedBuses& buses,
         for (auto departureIt = goingThroughStops.begin(); departureIt < goingThroughStops.end();
              departureIt++)
         {
-            double summaryDistance = 0;
+            size_t summaryDistance = 0;
             for (auto destinationIt = next(departureIt); destinationIt < goingThroughStops.end();
                  destinationIt++)
             {

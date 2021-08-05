@@ -12,7 +12,7 @@ constexpr auto Precision = 0.0001;
 double relativeDiff(double lhs, double rhs)
 {
     double max = std::max(fabs(lhs), fabs(rhs));
-    return max == 0.0 ? 0.0 : fabs(lhs - rhs) / max;
+    return max < std::numeric_limits<double>::epsilon() ? 0.0 : fabs(lhs - rhs) / max;
 }
 } // namespace
 

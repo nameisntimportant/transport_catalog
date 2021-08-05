@@ -1,6 +1,7 @@
 #include "graph.h"
 #include "graphTestSuite.h"
 #include "testRunner.h"
+#include "utils.h"
 
 using namespace std;
 
@@ -9,7 +10,7 @@ namespace
 template <typename Weight>
 bool operator==(const Graph::Edge<Weight>& lhs, const Graph::Edge<Weight>& rhs)
 {
-    return lhs.from == rhs.from && lhs.to == rhs.to && lhs.weight == rhs.weight;
+    return lhs.from == rhs.from && lhs.to == rhs.to && fuzzyCompare(lhs.weight, rhs.weight);
 }
 
 template <typename Weight>
@@ -26,15 +27,15 @@ namespace Tests
 void testEmptyGraph()
 {
     DirectedWeightedGraph<double> graph;
-    ASSERT_EQUAL(graph.getVertexCount(), 0);
-    ASSERT_EQUAL(graph.getEdgeCount(), 0);
+    ASSERT_EQUAL(graph.getVertexCount(), 0u);
+    ASSERT_EQUAL(graph.getEdgeCount(), 0u);
 }
 
 void testDifferentWeightDependingOnDirection()
 {
     DirectedWeightedGraph<int> graph(2);
-    graph.addEdge({0, 1, -3124});
-    graph.addEdge({1, 0, 4951335});
+    graph.addEdge({.from = 0, .to = 1, .weight = -3124});
+    graph.addEdge({.from = 1, .to = 0, .weight = 4951335});
 
     ASSERT_EQUAL(graph.getEdge(0), Edge<int>({.from = 0, .to = 1, .weight = -3124}));
     ASSERT_EQUAL(graph.getEdge(1), Edge<int>({.from = 1, .to = 0, .weight = 4951335}));
@@ -70,8 +71,8 @@ void testGraphWithSeveralVertexesAndEdges()
     ASSERT_EQUAL(graph.getEdgesWhichStartFrom(4), asRange(vector<EdgeId>{1}));
     ASSERT_EQUAL(graph.getEdgesWhichStartFrom(5), asRange(vector<EdgeId>{}));
 
-    ASSERT_EQUAL(graph.getVertexCount(), 6);
-    ASSERT_EQUAL(graph.getEdgeCount(), 6);
+    ASSERT_EQUAL(graph.getVertexCount(), 6u);
+    ASSERT_EQUAL(graph.getEdgeCount(), 6u);
 }
 
 void runGraphTests()
@@ -80,6 +81,6 @@ void runGraphTests()
     RUN_TEST(tr, testEmptyGraph);
     RUN_TEST(tr, testDifferentWeightDependingOnDirection);
     RUN_TEST(tr, testGraphWithSeveralVertexesAndEdges);
-};
+}
 } // namespace Tests
 } // namespace Graph

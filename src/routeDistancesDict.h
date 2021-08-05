@@ -25,4 +25,4 @@ struct FromToHasher
     }
 };
 
-using RouteDistancesMap = std::unordered_map<FromTo, unsigned int, FromToHasher>;
+using RouteDistancesMap = std::unordered_map<FromTo, size_t, FromToHasher>;

@@ -59,8 +59,8 @@ void testOrthodromicDistance()
 
         stringstream description;
         DebugOutput(description) << "the way from" << ranLa1 << ranLo1 << "to" << ranLa2 << ranLo2
-                                 << "is not equal to the way back";
-        AssertEqual(distanceOneWay, distanceTheWayBack, description.str());
+                                 << "is not equal to the way back:" << distanceOneWay << " != " << distanceTheWayBack;
+        Assert(fuzzyCompare(distanceOneWay, distanceTheWayBack), description.str());
     }
 
     for (size_t i = 0; i < 100; i++)
@@ -68,10 +68,11 @@ void testOrthodromicDistance()
         const auto ranLa1 = getRandomLa();
         const auto ranLo1 = getRandomLo();
 
+        const auto dist = distance({ranLa1, ranLo1}, {ranLa1, ranLo1});
         stringstream description;
         DebugOutput(description) << "the way from" << ranLa1 << ranLo1
-                                 << "to itself is not equal 0.0";
-        AssertEqual(distance({ranLa1, ranLo1}, {ranLa1, ranLo1}), 0.0, description.str());
+                                 << "to itself is not equal to 0.0. Ectual value " << dist;
+        Assert(fuzzyCompare(dist, 0.0), description.str());
     }
 }
 
@@ -79,6 +80,6 @@ void run()
 {
     TestRunner tr;
     RUN_TEST(tr, testOrthodromicDistance);
-};
+}
 } // namespace Tests
 } // namespace Sphere

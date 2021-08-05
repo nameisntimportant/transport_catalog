@@ -214,5 +214,5 @@ void runTransportRouterTests()
 {
     TestRunner tr;
     RUN_TEST(tr, testFindRoute);
-};
+}
 } // namespace Tests

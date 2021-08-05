@@ -85,17 +85,17 @@ class JsonTree
 {
 public:
     explicit JsonTree(Node root)
-        : root(move(root))
+        : root_(move(root))
     {
     }
 
     const Node& getRoot() const
     {
-        return root;
+        return root_;
     }
 
 private:
-    Node root;
+    Node root_;
 };
 
 Node loadNode(std::istream& input);

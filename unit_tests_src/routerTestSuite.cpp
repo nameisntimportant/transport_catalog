@@ -27,19 +27,6 @@ void assertEdgesInRouteAreEqualTo(const Router<Weight>& router,
 }
 constexpr auto EmptyRouteInfo = optional<RouteInfo>();
 
-bool operator==(const typename Router<double>::RouteInfo& lhs, const typename Router<double>::RouteInfo& rhs)
-{
-    return lhs.id == rhs.id && fuzzyCompare(lhs.weight, rhs.weight) && lhs.edgeCount == rhs.edgeCount;
-}
-
-ostream& operator<<(ostream& stream, const optional<typename Router<double>::RouteInfo>& routeInfoOpt)
-{
-    if (!routeInfoOpt)
-    {
-        return stream << "route not found";
-    }
-    return stream << "id " << routeInfoOpt->id << " weight " << routeInfoOpt->weight << " edgeCount " << routeInfoOpt->edgeCount;
-}
 } // namespace
 
 void testBuildNonExistingRoute()
@@ -59,7 +46,7 @@ void testTwoDifferentEdgesBetweenOnePairOfVertexes()
 
     constexpr auto expected = RouteInfo({.id = 0, .weight = 9442.44, .edgeCount = 1});
     ASSERT_EQUAL(router.buildRoute(0, 1), expected);
-    ASSERT_EQUAL(router.getRouteEdge(expected.id, 0), 1);
+    ASSERT_EQUAL(router.getRouteEdge(expected.id, 0), 1u);
 
     ASSERT_EQUAL(router.buildRoute(1, 0), EmptyRouteInfo);
 }
@@ -128,7 +115,7 @@ void testGraphWithSeveralVetexesAndEdges()
     Router<double> router(graph);
 
     ASSERT_EQUAL(router.buildRoute(0, 1), RouteInfo({.id = 0, .weight = 114.7, .edgeCount = 1}));
-    ASSERT_EQUAL(router.getRouteEdge(0, 0), 0);
+    ASSERT_EQUAL(router.getRouteEdge(0, 0), 0u);
 
     {
         auto route = router.buildRoute(7, 2);
@@ -211,20 +198,20 @@ void testReleaseRoute()
 
     const auto routeIdFirst = router.buildRoute(0, 1)->id;
     const auto routeIdSecond = router.buildRoute(1, 0)->id;
-    ASSERT_EQUAL(router.getRouteEdge(routeIdFirst, 0), 0);
-    ASSERT_EQUAL(router.getRouteEdge(routeIdSecond, 0), 1);
+    ASSERT_EQUAL(router.getRouteEdge(routeIdFirst, 0), 0u);
+    ASSERT_EQUAL(router.getRouteEdge(routeIdSecond, 0), 1u);
 
     router.releaseRoute(routeIdFirst);
     ASSERT_EXCEPTION_THROWN(router.getRouteEdge(routeIdFirst, 0), out_of_range);
 
     // check if the first route is still cached
-    ASSERT_EQUAL(router.getRouteEdge(routeIdSecond, 0), 1);
+    ASSERT_EQUAL(router.getRouteEdge(routeIdSecond, 0), 1u);
 
     router.releaseRoute(routeIdSecond);
     ASSERT_EXCEPTION_THROWN(router.getRouteEdge(routeIdSecond, 0), out_of_range);
 
     const auto routeIdAfterReleasingRoutes = router.buildRoute(0, 1)->id;
-    ASSERT_EQUAL(routeIdAfterReleasingRoutes, 2);
+    ASSERT_EQUAL(routeIdAfterReleasingRoutes, 2u);
 }
 
 void runRouterTests()
@@ -237,6 +224,6 @@ void runRouterTests()
     RUN_TEST(tr, testCircleGraph);
     RUN_TEST(tr, testGraphWithSeveralVetexesAndEdges);
     RUN_TEST(tr, testReleaseRoute);
-};
+}
 } // namespace Tests
 } // namespace Graph

@@ -51,8 +51,8 @@ bool operator==(const BaseRequests::Stop& lhs, const BaseRequests::Stop& rhs)
         }
     }
 
-    return lhs.name == rhs.name && lhs.position.latitude == rhs.position.latitude &&
-           lhs.position.longitude == rhs.position.longitude;
+    return lhs.name == rhs.name && fuzzyCompare(lhs.position.latitude, rhs.position.latitude) &&
+           fuzzyCompare(lhs.position.longitude, rhs.position.longitude);
 }
 
 ostream& operator<<(ostream& os, const BaseRequests::Stop& stop)

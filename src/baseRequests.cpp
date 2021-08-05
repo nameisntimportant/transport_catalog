@@ -8,7 +8,7 @@ Stop Stop::parseFrom(const Json::Map& attrs)
 {
     Sphere::Point position = {.latitude = attrs.at("latitude").asDouble(),
                               .longitude = attrs.at("longitude").asDouble()};
-    Stop stop = {.name = attrs.at("name").asString(), .position = position};
+    Stop stop = {.name = attrs.at("name").asString(), .position = position, .distances = {}};
 
     if (attrs.count("road_distances") > 0)
     {

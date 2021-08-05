@@ -41,7 +41,8 @@ Node loadNumber(istream& input)
         input.ignore(1);
     }
 
-    int intPart = 0;
+    // use double to store int part in case we are parsing double with int part bigger then INT_MAX
+    double intPart = 0;
     while (isdigit(input.peek()))
     {
         intPart *= 10;

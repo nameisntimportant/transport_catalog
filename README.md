@@ -5,7 +5,7 @@ Transport catalog is a system of storing transport routes and processing related
 
 The program performs input and output via standard input/output streams in JSON format.
 # Content
- - [Input description](#Input&#32description)
+ - [Input description](#Input%20description)
  - [Output description](#Output&#32description)
  - [Restrictions](#Restrictions)
  - [Complexity](#Complexity)
@@ -22,7 +22,7 @@ The program expects a JSON dictionary to be input. Dictionary keys in JSON can b
 }
 ```
 A dictionary that sets the settings of bus routes (for all routes in the database). Keys:
- - *"bus_wait_time"* — a non-negative integer, the waiting time of the bus at the stop in minutes. At this stage, it is assumed that whenever a person comes to a stop and whatever this stop is, he will wait for any bus for exactly the specified number of minutes 
+ - *"bus_wait_time"* — a nonnegative integer, the waiting time of the bus at the stop in minutes. At this stage, it is assumed that whenever a person comes to a stop and whatever this stop is, he or she will wait for any bus for exactly the specified number of minutes 
  - *"bus_velocity"* — a positive real number, the speed of the bus in km / h. It is assumed that the speed of any bus is constant and exactly equal to the specified number. The time of parking at stops is not taken into account, the time of acceleration and braking neither
 
 #### serialization_settings
@@ -77,9 +77,9 @@ An array of an arbitrary number of stat requests. Each stat request is a diction
 ```
 Request to add a stop to the database. Keys:
  - *"name"* - string, the name of the stop
- - *"latitude"* - a real number from -90 to 90, latitude of the stop in GPS-coordinates.
- - *"longitude"* - a real number from -180 to 180, longitude of the stop in GPS-coordinates.
- - *"road_distances"* - map of the path along the road from this stop to neighboring ones. Key - string, neighbor station name, value - a non-negative integer, distance in meters. By default, the distance from stopA to stopB is assumed to be equal to the distance from stopB to stopA, unless the distance from stopB to stopA is explicitly specified when adding stopB.
+ - *"latitude"* - a real number from -90 to 90, latitude of the stop in GPS-coordinates
+ - *"longitude"* - a real number from -180 to 180, longitude of the stop in GPS-coordinates
+ - *"road_distances"* - map of the path along the road from this stop to neighboring ones. Key - string, neighbor station name, value - a nonnegative integer, distance in meters. By default, the distance from stopA to stopB is assumed to be equal to the distance from stopB to stopA, unless the distance from stopB to stopA is explicitly specified when adding stopB
 #### Bus
 ```
 {
@@ -95,8 +95,8 @@ Request to add a stop to the database. Keys:
 ```
 Request to add a bus route to the database. Keys:
 - *"name"* - string, name of the bus
-- *"stops"* - an array containing the lines - the names of the stops that the bus passes through in the order of its sequence
-- *"is_roundtrip"* - a flag indicating whether the bus route is circular. The circular route starts and ends at one station. A non-circular route runs from the initial station to the final one, turns around and goes in the opposite direction. Let's take for example a bus with *"stops"* : ["A", "B", "C", "A"]. If *"is_roundtrip"* : true, then its route is: A-B-C-A. If *"is_roundtrip"* : false, its route is A-B-C-A-C-B-A. At the final stop, buses drop off all passengers and leave for the bus fleet. If a passenger wants to pass through the final station on a circular bus, he will have to get off at the final stop and wait for the same bus.
+- *"stops"* - an array of strings - the names of the stops that the bus passes through in the order of its sequence
+- *"is_roundtrip"* - a flag indicating whether the bus route is circular. The circular route starts and ends at one station. A non-circular route runs from the initial station to the final one, turns around and goes in the opposite direction. Let's take for example a bus with *"stops"* : ["A", "B", "C", "A"]. If *"is_roundtrip"* : true, then its route is: A-B-C-A. If *"is_roundtrip"* : false, its route is A-B-C-A-C-B-A. At the final stop, buses drop off all passengers and leave for the bus fleet. If a passenger wants to pass through the final station on a circular bus, he or she will have to get off at the final stop and wait for the same bus
 
 ## process_requests mode
 #### serialization_settings
@@ -132,13 +132,13 @@ A dictionary that sets serialization settings. Keys:
       "type": "Stop",
       "name": "Court St at Main St, County Court",
       "id": 4
-    },
+    }
 ]
 ```
 An array of an arbitrary number of stat requests. Each stat request contains keys: 
- - *"id"* - целое неотрицательное число, уникальный номер запроса, который так же содержится в ответе на запрос под ключём *"request_id"*. Служит для сопоставления [stat_requests](####stat_requests) и [stat_requests repsnoses](#Output description) пользователем программы.
- - *"type"* - строка - тип stat запроса. 
-##### Типы стат запросов
+ - *"id"* - a nonnegative integer, a unique request number, which is also contained in the response to the request under the key *"request_id"*. It is used for matching stat_requests and stat_requests repsnoses by the program user
+ - *"type"* - string, type of stat request
+##### Types of stat requests
 #### Stop
 ```
 {
@@ -147,8 +147,8 @@ An array of an arbitrary number of stat requests. Each stat request contains key
     "id": 1
 }
 ```
-Вывести информацию об остановке. Ссылкой на ответ к реквесту. Ключи:
- - *"name"* - строка, имя остановки
+Output information about the stop to standard output. Keys:
+ - *"name"* - string, the name of the stop
 
 #### Bus
 ```
@@ -158,8 +158,8 @@ An array of an arbitrary number of stat requests. Each stat request contains key
     "id": 2
 }
 ```
-Вывести информацию об автобусном маршруте. Ключи:
- - *"name"* - строка, имя автобусного маршрута
+Output information about the bus route to standard output. Keys:
+ - *"name"* - string, the name of the bus route
 
 #### Route
 ```
@@ -170,15 +170,16 @@ An array of an arbitrary number of stat requests. Each stat request contains key
     "id": 3
 }
 ```
-Построить и вывести кратчайший маршрут между двумя остановками. Ключи:
- - *"from"* — строка, название остановки, в которой нужно начать маршрут.
- - *"to"* — строка, название остановки, в которой нужно закончить маршрут.
+Build and output the shortest route between two stops. Keys:
+ - *"from"* — string, the name of the stop where you want to start the route
+ - *"to"* — string, the name of the stop where you want to stop the route
 
+A passenger can change between bus routes during the journey, but he or she can not walk between stops
 # Output description
-В режиме **make_base** в случае успешного выполнения программа не имеет вывода. 
-В режиме **process_requests** выводом являются ответы на стат запросы. Каждый ответ имеет ключ *"request_id"*, равный значению *"id"* из соответствующего [stat_request](####  stat_requests) стат запроса (см описание stat запросов). Ссылкой!
+In the **make_base** mode, if the program is executed successfully, it has no output
+In the **process_requests** mode, the output is responses to stat requests. Each response has a key *"request_id"* equal to the value under the key *"id"* from the corresponding stat request
 
-#### Ответ "not found"
+#### Response "not found" 
 --------
 ```
 {
@@ -186,8 +187,8 @@ An array of an arbitrary number of stat requests. Each stat request contains key
     "request_id": 11
 }
 ```
-Выводится в случае, если в базе данных нет необходимой информации (нет запрашиваемого автобуса, остановки, либо искомый маршрут нельзя построить) Данный ответ универсален для любого типа стат запроса
-#### Ответ на стат запрос типа [Stop](####Stop)
+Output if the requested information is not in the database (there is no requested bus, stop, or the desired route cannot be built). This response is universal for any type of stat request
+#### Response to a [Stop](####Stop) type stat request
 --------
 ```
 {
@@ -199,10 +200,10 @@ An array of an arbitrary number of stat requests. Each stat request contains key
     "request_id": 4
 }
 ``` 
-Ключи:
- - *"buses"* - массив строк, автобусные маршруты, проходящие через остановку. Может быть пустым, если через остановку не проходит ни один автобусный маршрут
+Keys:
+- *"buses"* - array of strings, bus routes passing through the stop. It can be empty if no bus route passes through the stop
 
-#### Ответ на стат запрос типа [Bus](####Bus)
+#### Response to a [Bus](####Bus) type stat request
 --------
 ```
 {
@@ -213,13 +214,13 @@ An array of an arbitrary number of stat requests. Each stat request contains key
     "request_id": 3
 }
 ```
-Ключи:
- - *"route_length"* - неотрицательное вещественное число, длинна маршрута измерения по дорогам в метрах
- - *"stop_count"* - неотрицательное натуральное число, количество остановок, через которое проходит автобусный маршрут
- - *"unique_stop"* - неотрицательное натуральное число, количество уникальных остановок, через которые проходит автобусный маршрут
- - *"curvature"* - неотрицательное вещественное число, отношение кратчайшего пути между остановками маршрута на поверхности сферы (ортодромии) к пути, измеренного по дорогам. Может быть меньше единицы лишь в случае использования хордовых тоннелей. В остальных случаях больше либо равен единице
+Keys:
+- *"route_length"* is a nonnegative real number, route length measuring on roads in meters
+- *"stop_count"* is a nonnegative integer, number of stops, through which runs a bus route
+- *"unique_stop"* is a nonnegative integer, the number of unique stops, through which the bus route
+- *"curvature"* is a nonnegative real number, the ratio of the shortest path between the stops of the route on the surface of the sphere (orthodromy) to the path measured by roads. It can be less than one only if chord tunnels are used. In all other cases, it is greater than or equal to one
 
-#### Ответ на стат запрос типа [Route](####Route)
+#### Response to a [Route](####Route) type stat request
 --------
 ```
 {
@@ -240,11 +241,11 @@ An array of an arbitrary number of stat requests. Each stat request contains key
     "request_id": 4
 }
 ```
-Ключи:
- - *"total_time"* - неотрицательное вещественное число, минимальное время, необходимое что бы осуществить поездку, в минутах
- - *"items"* - массив элементов маршрута, каждый из которых описывает активность пассажира, требующую временных затрат
+Keys:
+- *"total_time"* - a nonnegative real number, the minimum time required to make a trip, in minutes
+- *"items"* - an array of route elements, each of which describes the passenger's activity that requires time
 
-##### Типы элементов маршрута
+##### Types of route elements
 #### Wait
 ```
 {
@@ -253,9 +254,9 @@ An array of an arbitrary number of stat requests. Each stat request contains key
     "type": "Wait"
 }
 ```
-Подождать автобуса на остановке. Ключи:
- - *"stop_name"* - строка, имя остановки
- - *"time"* - неотрицательное вещественное число, время, которое необходимо подождать на остановке в минутах
+Wait for the bus at the bus stop. Keys:
+- *"stop_name"* - string, the name of the stop
+- *"time"* - a nonnegative real number, the time to wait at the stop in minutes
 
 #### Bus
 ```
@@ -266,33 +267,32 @@ An array of an arbitrary number of stat requests. Each stat request contains key
     "type": "Bus"
 }
 ```
-Проехать на автобусе, начиная свою поездку с остановки, указанной в предыдущем элементе *"Wait"*. Ключи:
- - *"span_count"* натуральное число, колличество остановок, которые необходимо проехать
- - *"time"* неотрицательное вещественное число, время которое необходимо потратить на поездку в минутах
- - *"bus"* строка, имя автобусного маршрута
+Take the bus, starting your trip from the stop specified in the previous element * "Wait"*. Keys:
+- *"spin_count"* natural number, the number of stops that need to be traveled
+- *"time"* nonnegative real number, the time it takes to overcome the path between stops in minutes
+- *"bus"* string, the name of the bus route
+
 
 # Restrictions
-Целые числа имеют диапазон минимум от –32768 до 32767, для большинства систем −2 147 483 648 до 2 147 483 647.
-Вещественные числа имеют диапазон +/- 1.7E-308 до 1.7E+308. Ожидается, что вещественные числа не подаются на вход в экспоненциальной записи. Выводятся вещественные числа с шестью значащими цифрами.
-Ожидается, что для всех заданных Bus заданы так же и Stops, содержащихся в Bus, а так же расстояния между всеми Stops, через которые следует Bus.
-Ожидается, что остановка определена не более чем в одном base_request Stop.
+Integers have a minimum range from -32768 to 32767, for most systems -2147,483,648 to 2,147,483,647.
+Real numbers have a range of +/- 1.7 E-308 to 1.7 E+308. It is expected that the real numbers are not under the numbers on the input in the exponential notation. Real numbers are output with six significant digits
+It is expected that all stops contained in the bus routes are set in some Stop base request, as well as the distances between all the stops that the bus passes through
 # Сomplexity
-#### Режим make_base
-Основные затраты памяти и процессорного времени связаны с препроцессингом оптимальных путей, остальные затраты пренебрежимо малы. Так как программа реализует препроцессинг всех возможных путей с помощью алгоритма Дейкстры, её сложность составляет О(V^3 + E), где V - количество остановок в базе данных, а E - суммарное количество остановок во всех автобусных маршрутах, содержащихся в базе данных. Кроме того, ей требуется O(V^2) объём памяти.
-#### Режим process_requests
-Сложность обработки стат запросов в зависимости от типа запроса:
- - *"Stop"* - линейная, относительно количества автобусов, проходящих через эту остановку. 
+#### make_base mode
+The main costs of memory and processor time are associated with the preprocessing of optimal paths, the remaining costs are negligible. Since the program implements preprocessing of all possible paths using Dijkstra's algorithm, its complexity is O (V^3 + E), where V is the number of stops in the database, and E is the total number of stops in all bus routes contained in the database. Memory usage asymptotics is O(V^2 + E).
+#### process_requests mode
+The complexity of processing stat requests, depending on the type of request:
+- *"Stop"* - linear in the number of buses passing through this stop
+- *"Bus*" - constant
+- *"Route"* - linear in the number of elements of the final route
 
- - *"Bus*" - константная.
-
- - *"Route"* - линейная, относительно элементов итогового маршрута.
 
 # Example
 Run transport catalog in make_base mode:
 ```
 transport_catalog make_base
 ```
-Put information about routing settings, serialization settings, stops and buses to standart input stream:
+Put information about routing settings, serialization settings, stops, and buses to standard input stream:
 ```
 {
   "serialization_settings": {
@@ -367,7 +367,7 @@ After the program finished, run transport catalog in process requests mode:
 ```
 transport_catalog process_requests
 ```
-Put serialization settings and requests to the database to standart input stream:
+Put serialization settings and requests to the database to standard input stream:
 ```
 {
   "serialization_settings": {
@@ -404,7 +404,7 @@ Put serialization settings and requests to the database to standart input stream
   ]
 }
 ```
-Optput of transport catalog:
+Output of transport catalog:
 ```
 [
     {

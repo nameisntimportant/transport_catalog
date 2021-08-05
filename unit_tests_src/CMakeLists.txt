@@ -34,7 +34,7 @@ set(UNDER_TEST_HDRS
     ${SRC_DIRECTORY}/routeDistancesDict.h
     ${SRC_DIRECTORY}/transportRouter.h)
 
-add_executable(${UNIT_TESTS_PROJECT} ${UNIT_TESTS_PROJECT_SRCS} ${UNIT_TESTS_PROJECT_HDRS}
+add_executable(${TARGET} ${UNIT_TESTS_PROJECT_SRCS} ${UNIT_TESTS_PROJECT_HDRS}
                ${UNDER_TEST_SRCS} ${UNDER_TEST_HDRS})
 
 target_include_directories(${TARGET} PRIVATE ${SRC_DIRECTORY} ${UTILS_DIRECTORY})

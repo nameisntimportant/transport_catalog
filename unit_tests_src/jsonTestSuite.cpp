@@ -126,7 +126,7 @@ void testSingleElementLoading()
         auto maxNRoot = Json::load(maxN).getRoot();
         ASSERT(maxNRoot.isInt());
         ASSERT(maxNRoot.isDouble());
-        assertIsNotAllTypesExcept(negativeNRoot, "int", "double");
+        assertIsNotAllTypesExcept(maxNRoot, "int", "double");
         ASSERT_EQUAL(maxNRoot.asInt(), numeric_limits<int>::max());
 
         istringstream minN(to_string(numeric_limits<int>::min()));
@@ -166,26 +166,17 @@ void testSingleElementLoading()
         assertIsNotAllTypesExcept(smallNRoot, "double", "pureDouble");
         ASSERT_DOUBLE_EQUAL(smallNRoot.asDouble(), 0.000001);
 
-        istringstream maxN(to_string(numeric_limits<int>::max()));
+        istringstream maxN(to_string(numeric_limits<double>::max()));
         auto maxNRoot = Json::load(maxN).getRoot();
         ASSERT(maxNRoot.isDouble());
-        ASSERT(maxNRoot.isInt());
-        assertIsNotAllTypesExcept(maxNRoot, "double", "int");
-        ASSERT_DOUBLE_EQUAL(maxNRoot.asDouble(), numeric_limits<int>::max());
+        assertIsNotAllTypesExcept(maxNRoot, "double", "pureDouble");
+        ASSERT_DOUBLE_EQUAL(maxNRoot.asDouble(), numeric_limits<double>::max());
 
-        istringstream minN(to_string(numeric_limits<int>::min()));
+        istringstream minN(to_string(numeric_limits<double>::min()));
         auto minNRoot = Json::load(minN).getRoot();
         ASSERT(minNRoot.isDouble());
-        ASSERT(minNRoot.isInt());
-        assertIsNotAllTypesExcept(minNRoot, "double", "int");
-        ASSERT_DOUBLE_EQUAL(minNRoot.asDouble(), numeric_limits<int>::min());
-
-        istringstream zero(to_string(0));
-        auto zeroRoot = Json::load(zero).getRoot();
-        ASSERT(zeroRoot.isDouble());
-        ASSERT(zeroRoot.isInt());
-        assertIsNotAllTypesExcept(zeroRoot, "double", "int");
-        ASSERT_EQUAL(zeroRoot.asDouble(), 0);
+        assertIsNotAllTypesExcept(minNRoot, "double", "pureDouble");
+        ASSERT_DOUBLE_EQUAL(minNRoot.asDouble(), numeric_limits<double>::min());
     }
 
     {

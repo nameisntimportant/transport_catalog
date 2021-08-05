@@ -61,7 +61,7 @@ Json::Map Bus::process(const TransportCatalog& database) const
         {"stop_count", Json::Node(static_cast<int>(bus->stopCount))},
         {"unique_stop_count", Json::Node(static_cast<int>(bus->uniqueStopCount))},
         {"route_length", Json::Node(static_cast<int>(bus->roadRouteLength))},
-        {"curvature", Json::Node(bus->roadRouteLength / bus->orthodromicRouteLength)},
+        {"curvature", Json::Node(static_cast<double>(bus->roadRouteLength) / bus->orthodromicRouteLength)},
     };
 }
 

@@ -119,7 +119,7 @@ DirectedWeightedGraph<Weight> DirectedWeightedGraph<Weight>::deserialize(
 
     DirectedWeightedGraph graph;
 
-    graph.edges_.reserve(proto.edges_size());
+    graph.edges_.reserve(static_cast<unsigned int>(proto.edges_size()));
     for (const auto& edgeProto : proto.edges())
     {
         auto& edge = graph.edges_.emplace_back();
@@ -128,11 +128,11 @@ DirectedWeightedGraph<Weight> DirectedWeightedGraph<Weight>::deserialize(
         edge.weight = edgeProto.weight();
     }
 
-    graph.vertexes_.reserve(proto.incidence_lists_size());
+    graph.vertexes_.reserve(static_cast<unsigned int>(proto.incidence_lists_size()));
     for (const auto& vertexesVectorProto : proto.incidence_lists())
     {
         auto& vertexes = graph.vertexes_.emplace_back();
-        vertexes.reserve(vertexesVectorProto.edge_ids_size());
+        vertexes.reserve(static_cast<unsigned int>(vertexesVectorProto.edge_ids_size()));
         for (const auto edgeId : vertexesVectorProto.edge_ids())
         {
             vertexes.push_back(edgeId);

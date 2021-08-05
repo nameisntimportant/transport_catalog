@@ -223,12 +223,14 @@ Router<Weight>::Router(const Graph& graph, const GraphProto::Router& proto)
     static_assert(std::is_same_v<Weight, double>,
                   "Serialization is implemented only for double weights");
 
-    routesInternalData_.reserve(proto.routes_data_size());
+    routesInternalData_.reserve(static_cast<size_t>(proto.routes_data_size()));
     for (const auto& routesDataForOneVertexProto : proto.routes_data())
     {
         auto& routesDataForOneVertex = routesInternalData_.emplace_back();
-        routesDataForOneVertex.reserve(routesDataForOneVertexProto.routes_data_for_one_vertex_size());
-        for (const auto& routeDataForOneVertexProto : routesDataForOneVertexProto.routes_data_for_one_vertex())
+        routesDataForOneVertex.reserve(
+            static_cast<size_t>(routesDataForOneVertexProto.routes_data_for_one_vertex_size()));
+        for (const auto& routeDataForOneVertexProto :
+             routesDataForOneVertexProto.routes_data_for_one_vertex())
         {
             auto& routeData = routesDataForOneVertex.emplace_back();
             if (routeDataForOneVertexProto.exists())

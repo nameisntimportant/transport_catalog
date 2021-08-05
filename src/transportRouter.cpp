@@ -52,8 +52,8 @@ void TransportRouter::fillGraphWithEdges(const BaseRequests::ParsedBuses& buses,
                 }
 
                 summaryDistance += routeDistances.at({*prev(destinationIt), *destinationIt});
-                const double transitTime = summaryDistance / routingSettings.busVelocity;
-                const size_t spanCount = std::distance(departureIt, destinationIt);
+                const double transitTime = static_cast<double>(summaryDistance) / routingSettings.busVelocity;
+                const size_t spanCount = static_cast<size_t>(std::distance(departureIt, destinationIt));
                 RouteElement routeElement = {.waitTime = routingSettings.busWaitTime,
                                              .bus = busName,
                                              .from = *departureIt,
@@ -114,7 +114,7 @@ void TransportRouter::serialize(TCProto::TransportRouter& proto) const
     graph_->serialize(*proto.mutable_graph());
     router_->serialize(*proto.mutable_router());
 
-    proto.mutable_vertexes_info()->Reserve(stopToVertex_.size());
+    proto.mutable_vertexes_info()->Reserve(static_cast<int>(stopToVertex_.size()));
     for (const auto& [stopName, vertexId] : stopToVertex_)
     {
         auto& vertexInfoProto = *proto.add_vertexes_info();
@@ -122,7 +122,7 @@ void TransportRouter::serialize(TCProto::TransportRouter& proto) const
         vertexInfoProto.set_vertex_id(vertexId);
     }
 
-    proto.mutable_edges_info()->Reserve(edgeToRouteElement_.size());
+    proto.mutable_edges_info()->Reserve(static_cast<int>(edgeToRouteElement_.size()));
     for (const auto& [edgeId, routeElement] : edgeToRouteElement_)
     {
         auto& edgeInfoProto = *proto.add_edges_info();
@@ -143,14 +143,14 @@ unique_ptr<TransportRouter> TransportRouter::deserialize(const TCProto::Transpor
     transportRouterPtr->graph_ = make_unique<RoutesGraph>(RoutesGraph::deserialize(proto.graph()));
     transportRouterPtr->router_ = Router::deserialize(proto.router(), *transportRouterPtr->graph_);
 
-    transportRouterPtr->stopToVertex_.reserve(proto.vertexes_info().size());
+    transportRouterPtr->stopToVertex_.reserve(static_cast<size_t>(proto.vertexes_info().size()));
     for (const auto& vertexInfoProto : proto.vertexes_info())
     {
         transportRouterPtr->stopToVertex_[vertexInfoProto.stop_name()] =
             vertexInfoProto.vertex_id();
     }
 
-    transportRouterPtr->edgeToRouteElement_.reserve(proto.edges_info().size());
+    transportRouterPtr->edgeToRouteElement_.reserve(static_cast<size_t>(proto.edges_info().size()));
     for (const auto& edgeInfoProto : proto.edges_info())
     {
         transportRouterPtr->edgeToRouteElement_[edgeInfoProto.edge_id()] = {

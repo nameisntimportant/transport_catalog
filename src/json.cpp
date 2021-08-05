@@ -27,7 +27,7 @@ Node loadBool(istream& input)
     string s;
     while (isalpha(input.peek()))
     {
-        s.push_back(input.get());
+        s.push_back(static_cast<char>(input.get()));
     }
     ASSERT_WITH_MESSAGE((s == "true" || s == "false"), "Can't cast string " + s + " to bool");
     return Node(s == "true");
@@ -50,7 +50,7 @@ Node loadNumber(istream& input)
     }
     if (input.peek() != '.')
     {
-        return Node(intPart * (isNegative ? -1 : 1));
+        return Node(static_cast<int>(isNegative ? -intPart : intPart));
     }
 
     input.ignore(1); // '.'

@@ -19,7 +19,7 @@ string readFileData(const string& fileName)
     const ifstream::pos_type endPos = file.tellg();
     file.seekg(0, ios::beg);
 
-    string data(endPos, '\0');
+    string data(static_cast<size_t>(endPos), '\0');
     file.read(&data[0], endPos);
     return data;
 }

@@ -11,9 +11,9 @@ message Stop {
 
 message Bus {
     string name = 1;
-    uint32 stop_count = 2;
-    uint32 unique_stop_count = 3;
-    uint32 road_route_length = 4;
+    uint64 stop_count = 2;
+    uint64 unique_stop_count = 3;
+    uint64 road_route_length = 4;
     double orthodromic_route_length = 5;
 };
 

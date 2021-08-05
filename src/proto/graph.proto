@@ -3,13 +3,13 @@ syntax = "proto3";
 package GraphProto;
 
 message Edge {
-  uint32 from = 1;
-  uint32 to = 2;
+  uint64 from = 1;
+  uint64 to = 2;
   double weight = 3;
 }
 
 message IncidenceList {
-  repeated uint32 edge_ids = 1;
+  repeated uint64 edge_ids = 1;
 }
 
 message DirectedWeightedGraph {
@@ -21,7 +21,7 @@ message RouteInternalData {
   bool exists = 1;
   double weight = 2;
   bool has_prev_edge = 3;
-  uint32 prev_edge = 4;
+  uint64 prev_edge = 4;
 }
 
 message RoutesInternalDataForOneVertex {

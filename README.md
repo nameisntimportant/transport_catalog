@@ -5,13 +5,13 @@ Transport catalog is a system of storing transport routes and processing related
 
 The program performs input and output via standard input/output streams in JSON format.
 # Content
- - [Input description](#Input%20description)
- - [Output description](#Output&#32description)
+ - [Input](#Input)
+ - [Output](#Output)
  - [Restrictions](#Restrictions)
  - [Complexity](#Complexity)
  - [Example](#Example)
-# Input description
-The program expects a JSON dictionary to be input. Dictionary keys in JSON can be arranged in any order. Formatting (that is, whitespace characters around parentheses, commas, and colons) does not matter. The following is a description of the contents of the input JSON dictionary in the format: key, example, decryption.
+# Input
+The program expects a JSON dictionary to be input. Dictionary keys in JSON can be arranged in any order. Formatting (that is, whitespace characters around parentheses, commas, and colons) does not matter. The following is a description of the contents of the input JSON dictionary in the format: key, example, decryption
 ## make_base mode
 #### routing_settings
 --------
@@ -136,7 +136,7 @@ A dictionary that sets serialization settings. Keys:
 ]
 ```
 An array of an arbitrary number of stat requests. Each stat request contains keys: 
- - *"id"* - a nonnegative integer, a unique request number, which is also contained in the response to the request under the key *"request_id"*. It is used for matching stat_requests and stat_requests repsnoses by the program user
+ - *"id"* - a nonnegative integer, a unique request number, which is also contained in the response to the request under the key *"request_id"*. It is used for matching stat_requests and stat_requests responses by the program user
  - *"type"* - string, type of stat request
 ##### Types of stat requests
 #### Stop
@@ -175,11 +175,12 @@ Build and output the shortest route between two stops. Keys:
  - *"to"* — string, the name of the stop where you want to stop the route
 
 A passenger can change between bus routes during the journey, but he or she can not walk between stops
-# Output description
+# Output
 In the **make_base** mode, if the program is executed successfully, it has no output
+
 In the **process_requests** mode, the output is responses to stat requests. Each response has a key *"request_id"* equal to the value under the key *"id"* from the corresponding stat request
 
-#### Response "not found" 
+#### Response "not found"
 --------
 ```
 {
@@ -215,7 +216,7 @@ Keys:
 }
 ```
 Keys:
-- *"route_length"* is a nonnegative real number, route length measuring on roads in meters
+- *"route_length"* is a nonnegative integer, route length measuring on roads in meters
 - *"stop_count"* is a nonnegative integer, number of stops, through which runs a bus route
 - *"unique_stop"* is a nonnegative integer, the number of unique stops, through which the bus route
 - *"curvature"* is a nonnegative real number, the ratio of the shortest path between the stops of the route on the surface of the sphere (orthodromy) to the path measured by roads. It can be less than one only if chord tunnels are used. In all other cases, it is greater than or equal to one
@@ -267,7 +268,7 @@ Wait for the bus at the bus stop. Keys:
     "type": "Bus"
 }
 ```
-Take the bus, starting your trip from the stop specified in the previous element * "Wait"*. Keys:
+Take the bus, starting your trip from the stop specified in the previous element *"Wait"*. Keys:
 - *"spin_count"* natural number, the number of stops that need to be traveled
 - *"time"* nonnegative real number, the time it takes to overcome the path between stops in minutes
 - *"bus"* string, the name of the bus route
@@ -275,7 +276,9 @@ Take the bus, starting your trip from the stop specified in the previous element
 
 # Restrictions
 Integers have a minimum range from -32768 to 32767, for most systems -2147,483,648 to 2,147,483,647.
+
 Real numbers have a range of +/- 1.7 E-308 to 1.7 E+308. It is expected that the real numbers are not under the numbers on the input in the exponential notation. Real numbers are output with six significant digits
+
 It is expected that all stops contained in the bus routes are set in some Stop base request, as well as the distances between all the stops that the bus passes through
 # Сomplexity
 #### make_base mode

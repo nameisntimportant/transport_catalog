@@ -24,7 +24,7 @@ set(PROJECT_HDRS
     ${UTILS_DIRECTORY}/log.h
     ${UTILS_DIRECTORY}/profiler.h)
 
-add_executable(${TARGET} ${PROJECT_SRCS} ${PROJECT_HDRS} ${PROTO_SRCS} ${PROTO_HDRS})
+add_executable(${TARGET} ${PROJECT_SRCS} ${PROJECT_HDRS})
 target_include_directories(${TARGET} PRIVATE ${UTILS_DIRECTORY})
 target_link_libraries(${TARGET} PRIVATE proto_lib)
 

@@ -1,4 +1,5 @@
 #include "baseRequests.h"
+#include "utils.h"
 
 using namespace std;
 
@@ -14,8 +15,9 @@ Stop Stop::parseFrom(const Json::Map& attrs)
     {
         for (const auto& [neighbourStop, distanceNode] : attrs.at("road_distances").asMap())
         {
-            stop.distances.push_back(
-                {neighbourStop, static_cast<unsigned int>(distanceNode.asInt())});
+            const auto distance = distanceNode.asInt();
+            ASSERT_WITH_MESSAGE(distance >= 0, "distance can't be negative: " + to_string(distance));
+            stop.distances.push_back({neighbourStop, static_cast<unsigned int>(distance)});
         }
     }
     return stop;

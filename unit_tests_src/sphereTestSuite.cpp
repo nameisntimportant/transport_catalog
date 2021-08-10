@@ -31,12 +31,10 @@ namespace Tests
 {
 void testOrthodromicDistance()
 {
-    ASSERT_DOUBLE_EQUAL(distance({145.1539, -139.398}, {-77.1804, -139.55}), 15307721.3517);
     ASSERT_DOUBLE_EQUAL(distance({-34.1539, 100.398}, {7.14, 129.55}), 5521923.004);
     ASSERT_DOUBLE_EQUAL(distance({1.1539, -120.398}, {77.1804, -129.55}), 8472294.8786);
 
     ASSERT_DOUBLE_EQUAL(distance({0.0, 0.0}, {0.0, 180.0}), EquatorLength / 2.0);
-    ASSERT_DOUBLE_EQUAL(distance({-180.0, 0.0}, {0.0, 0.0}), EquatorLength / 2.0);
     ASSERT_DOUBLE_EQUAL(distance({-90.0, 0.0}, {90.0, 0.0}), EquatorLength / 2.0);
 
     ASSERT_DOUBLE_EQUAL(distance({55.574371, 37.6517}, {55.581065, 37.64839}), 772.870);
@@ -50,8 +48,8 @@ void testOrthodromicDistance()
     for (size_t i = 0; i < 100; i++)
     {
         const auto ranLa1 = getRandomLa();
-        const auto ranLo1 = getRandomLa();
-        const auto ranLa2 = getRandomLo();
+        const auto ranLo1 = getRandomLo();
+        const auto ranLa2 = getRandomLa();
         const auto ranLo2 = getRandomLo();
 
         const auto distanceOneWay = distance({ranLa1, ranLo1}, {ranLa2, ranLo2});

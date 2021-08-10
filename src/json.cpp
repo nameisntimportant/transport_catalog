@@ -50,6 +50,10 @@ Node loadNumber(istream& input)
     }
     if (input.peek() != '.')
     {
+        const double maxValueAbs =
+            abs(isNegative ? numeric_limits<int>::max() : numeric_limits<int>::min());
+        ASSERT_WITH_MESSAGE(intPart <= maxValueAbs,
+                            "int value is out of range: " + to_string(intPart));
         return Node(static_cast<int>(isNegative ? -intPart : intPart));
     }
 

@@ -21,6 +21,11 @@ bool fuzzyCompare(double lhs, double rhs)
     return (relativeDiff(lhs, rhs) < Precision);
 }
 
+bool belongsToRange(double n, double lowerBound, double upperBound)
+{
+    return n >= lowerBound && n <= upperBound;
+}
+
 string_view strip(string_view line)
 {
     while (!line.empty() && isspace(line.front()))

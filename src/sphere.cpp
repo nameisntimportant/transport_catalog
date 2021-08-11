@@ -10,11 +10,6 @@ namespace
 {
 constexpr double DegreesToRadiansKoeff = M_PI / 180.0;
 constexpr double EarthRadius = 6'371'000;
-
-bool belongsToRange(double n, double lowerBound, double upperBound)
-{
-    return n >= lowerBound && n <= upperBound;
-}
 } // namespace
 
 namespace Sphere

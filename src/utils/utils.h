@@ -95,6 +95,8 @@ const V* getValuePointer(const std::unordered_map<K, V>& map, const K& key)
 
 std::string_view strip(std::string_view line);
 
+bool belongsToRange(double n, double lowerBound, double upperBound);
+
 bool fuzzyCompare(double lhs, double rhs);
 
 #define UNREACHABLE(msg)                                                                        \

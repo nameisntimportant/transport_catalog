@@ -277,7 +277,7 @@ Take the bus, starting your trip from the stop specified in the previous element
 # Restrictions
 Integers have a minimum range from -32768 to 32767, for most systems -2147,483,648 to 2,147,483,647.
 
-Real numbers have a range of +/- 1.7 E-308 to 1.7 E+308. It is expected that the real numbers are not under the numbers on the input in the exponential notation. Real numbers are output with six significant digits
+Real numbers have a range of +/- 1.7 E-308 to 1.7 E+308. It is expected that real numbers are not submitted to the input in the exponential number system
 
 It is expected that all stops contained in the bus routes are set in some Stop base request, as well as the distances between all the stops that the bus passes through
 # Сomplexity

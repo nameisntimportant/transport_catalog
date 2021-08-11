@@ -89,6 +89,8 @@ optional<TransportRouter::RouteStats> TransportRouter::findRoute(const string& f
         return nullopt;
     }
 
+    // It would be better to implement RAII wrapper around the route to be sure that it will be
+    // released, but we don't expect exceptions in normal workflow here, so we leave it as is by now
     const auto route = router_->buildRoute(stopToVertex_.at(from), stopToVertex_.at(to));
     if (!route)
     {

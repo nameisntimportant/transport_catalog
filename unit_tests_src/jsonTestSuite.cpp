@@ -274,7 +274,7 @@ void testPrint()
         "\"doublesArray\": [1.1, 2.2, 3.3], \"stringToIntMap\": {\"one\": 1, \"ten\": 10}}");
 
     ostringstream actual;
-    print(JsonTree(rootNode), actual);
+    print(Tree(rootNode), actual);
     ASSERT_EQUAL(actual.str(), expected);
 }
 

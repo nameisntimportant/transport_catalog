@@ -127,9 +127,9 @@ Node loadNode(istream& input)
     }
 }
 
-JsonTree load(istream& input)
+Tree load(istream& input)
 {
-    return JsonTree{loadNode(input)};
+    return Tree{loadNode(input)};
 }
 
 void printValue(const string& value, ostream& output)
@@ -190,7 +190,7 @@ void printNode(const Json::Node& node, ostream& output)
     visit([&output](const auto& value) { printValue(value, output); }, node.getBase());
 }
 
-void print(const JsonTree& tree, ostream& output)
+void print(const Tree& tree, ostream& output)
 {
     printNode(tree.getRoot(), output);
 }

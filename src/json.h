@@ -81,10 +81,10 @@ public:
     }
 };
 
-class JsonTree
+class Tree
 {
 public:
-    explicit JsonTree(Node root)
+    explicit Tree(Node root)
         : root_(move(root))
     {
     }
@@ -100,7 +100,7 @@ private:
 
 Node loadNode(std::istream& input);
 
-JsonTree load(std::istream& input);
+Tree load(std::istream& input);
 
 void printNode(const Node& node, std::ostream& output);
 
@@ -118,5 +118,5 @@ void printValue(const Array& nodes, std::ostream& output);
 
 void printValue(const Map& map, std::ostream& output);
 
-void print(const JsonTree& tree, std::ostream& output);
+void print(const Tree& tree, std::ostream& output);
 } // namespace Json
